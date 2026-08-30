@@ -65,6 +65,16 @@ Google Ads ma dwie conversion actions:
 - GA4: **G-JT28P4C0LD**, potwierdzone żywe trafienia `page_view`/`user_engagement` do `region1.google-analytics.com` (HTTP 204).
 - Property GA4 połączone z kontem Ads podczas setupu kampanii (marotino.com, property `531284463`).
 
+## Display/PMax assety graficzne — zatwierdzone (30.08.2026)
+
+Trzy formaty gotowe w `assets/approved/` (landscape 1200×628, square 1200×1200, portrait 960×1200) — zaakceptowane przez Cezarego. Wygenerowane w Nano Banana Pro / ChatGPT image gen (hotel lobby + telefon z chatem AI, bez logo — model źle renderuje litery, więc logo/wordmark dodawane osobno w PIL), nagłówki nałożone osobno (Python/Pillow, font Arial Bold + gradient scrim). Podgląd był publikowany jako Artifact do akceptacji wizualnej.
+
+**Pułapka przy nakładaniu tekstu:** licz szerokość nagłówka względem dostępnej szerokości przed wpisaniem na sztywno — w square format nagłówek "24/7 AI Concierge" nachodził na telefon przy pierwszej wersji (za szeroki na zarezerwowaną strefę). Poprawka: zawijanie tekstu mierzone realną szerokością pixelową (`draw.textbbox`), nie liczbą znaków — przy różnych proporcjach kadru (square vs portrait vs landscape) ta sama liczba znaków ma inną szerokość względem dostępnego miejsca.
+
+**Nie wgrane jeszcze do kampanii.** Plan: uruchomić jako kampanię Display/PMax **dopiero gdy lista remarketingowa (GA4 → Ads, odwiedzający `/products/xenia` z kampanii Search) osiągnie sensowny rozmiar** (Google wymaga ~100 aktywnych userów w 30 dni do serwowania) — świeży ruch z Display na zimno konwertuje słabo dla niszowego B2B, remarketing na ludzi którzy już widzieli stronę ma dużo lepsze szanse. Sprawdzić rozmiar audiencji w **Tools & Settings → Audience Manager**.
+
+**Brakuje jeszcze:** logo (1200×1200 kwadrat + 1200×300 poziome) — do zrobienia czystym tekstem w PIL, nie przez model graficzny (ryzyko glitchu w renderowaniu liter).
+
 ## Pułapki podczas zakładania konta (żeby nie powtórzyć)
 
 1. **Konto agencyjne z wieloma klientami pod jednym loginem** (ostrowski@marotino.com) — na liście kont Ads są zawieszone/w budowie drafty innych klientów (Optienergia, Batycki, Tincors, Menusso, itd.). Kreator "Create your first campaign" **domyślnie podłącza się do ostatniego niedokończonego draftu** — jeden z nich (konto 838-841-9692) miał wpisane dane **Optienergia** zamiast Marotino. Zawsze sprawdzić przy starcie nowej kampanii, czy nie kontynuujemy cudzego draftu — użyć przycisku "New Google Ads Account" → "Create a new account", nie "Finish setting up".

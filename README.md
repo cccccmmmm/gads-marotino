@@ -83,6 +83,12 @@ Trzy formaty gotowe w `assets/approved/` (landscape 1200×628, square 1200×1200
 4. **Pierwsza autoryzacja karty (Visa …9422) nie powiodła się** przy pierwszej próbie (bank oznaczył jako podejrzaną — typowe przy pierwszej płatności zagranicznej/online). Zadziałało po odblokowaniu karty przez użytkownika i dodaniu jej ponownie.
 5. Krok płatności wymaga **"Verify it's you"** — weryfikacja tożsamości w osobnym oknie popup, którą musi przejść człowiek (2FA), nie da się zautomatyzować.
 
+## Pułapka: karta 9422 przestała być obciążana (31.08.2026)
+
+Dzień po starcie kampanii pojawił się czerwony błąd **"Payment method can't be charged"** w diagnostyce kampanii — **0 impresji od 30.08 mimo statusu Enabled**. Primary payment method (Visa •••• 9422, ta sama karta co miała problem z autoryzacją przy zakładaniu konta) przestała być obciążana. Ręczna wpłata €100 inną kartą (Visa •••• 6042, "Make an optional payment") zbilansowała konto (Balance €0.00) ale **nie naprawiła problemu** — primary payment method nadal była 9422 i błąd nie znikał, kampania dalej nie serwowała reklam. Dopiero po naprawieniu/zmianie primary payment method błąd zniknął (status zmienił się z czerwonego "misconfigured" na łagodniejsze żółte "only eligible to serve to a limited audience" — to już nie blokuje serwowania, tylko normalny etap dla nowej kampanii).
+
+**Wniosek:** przy problemach z płatnością nie wystarczy dopłacić ręcznie z innej karty — trzeba naprawić/zmienić samą **primary payment method** w Billing → Settings → Payment methods, inaczej Google Ads dalej traktuje kampanię jako niesprawną. Warto też dodać **backup payment method** (na dziś: brak — osobny warning w Billing Settings), żeby przyszłe awarie karty głównej nie zatrzymywały kampanii.
+
 ## Do zrobienia / do obserwowania
 
 - [ ] Sprawdzić po ~3h czy conversion action "Form" (Website) przeszła weryfikację.

@@ -97,6 +97,14 @@ Po naprawieniu płatności diagnostyka nadal pokazywała czerwony błąd **"Your
 
 **Naprawa:** final URL i sitelinki `#pilot`/`#license`/`#platform` podmienione na `/products/xenia-white-label-mobile-app-rag` (anchory istnieją na nowej stronie, zweryfikowane).
 
+## Prawdziwa przyczyna "missing Google tag" — brakował dedykowany tag Ads (31.08.2026)
+
+Po naprawie redirecta błąd "Your website is missing a Google tag" **dalej się utrzymywał** w diagnostyce (0 impressions). Kliknięcie "Fix it" w Campaign diagnostics pokazało konkretny Tag ID: **AW-18418762437** — dedykowany tag konwersji Google Ads, osobny od GA4 (`G-JT28P4C0LD`). Wcześniejsze założenie w tym README ("Google Ads korzysta z już istniejącego gtag.js dla GA4, nie trzeba nic budować w GTM") było **błędne** — Google Ads chce zobaczyć swój własny tag AW- na stronie, GA4 shared tagging to nie zastępuje.
+
+**Naprawa:** w GTM-5JRBQF9N (konto Marotino CY LTD, kontener marotino.com) dodany nowy tag typu **Google Tag** z ID `AW-18418762437`, trigger "Initialization - All Pages", opublikowany jako **Version 3** (31.08.2026, 21:12). Zweryfikowane, że GTM nadal ładuje się na `/products/xenia-white-label-mobile-app-rag`.
+
+**Wniosek na przyszłość:** przy kampanii Google Ads z celem "Submit lead form" / conversion tracking na stronie **zawsze dodać dedykowany tag AW-XXXXXXXXX w GTM** (Tag type: "Google Tag"), nie polegać na tym że wspólny tag GA4 wystarczy — Google Ads i GA4 to osobne ID mimo współdzielonego mechanizmu gtag.js. Diagnostyka Ads potrzebuje do ~3h żeby zweryfikować nowy tag po publikacji.
+
 ## Do zrobienia / do obserwowania
 
 - [ ] Sprawdzić po ~3h czy conversion action "Form" (Website) przeszła weryfikację.

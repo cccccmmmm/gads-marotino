@@ -89,6 +89,14 @@ Dzień po starcie kampanii pojawił się czerwony błąd **"Payment method can't
 
 **Wniosek:** przy problemach z płatnością nie wystarczy dopłacić ręcznie z innej karty — trzeba naprawić/zmienić samą **primary payment method** w Billing → Settings → Payment methods, inaczej Google Ads dalej traktuje kampanię jako niesprawną. Warto też dodać **backup payment method** (na dziś: brak — osobny warning w Billing Settings), żeby przyszłe awarie karty głównej nie zatrzymywały kampanii.
 
+## Pułapka: zmiana slugu strony złamała final URL-e (31.08.2026)
+
+Po naprawieniu płatności diagnostyka nadal pokazywała czerwony błąd **"Your website is missing a Google tag"** mimo że tag GTM-5JRBQF9N faktycznie ładuje się na stronie. Przyczyna: **slug strony produktowej zmienił się** z `/products/xenia` na `/products/xenia-white-label-mobile-app-rag` już po ustawieniu kampanii (301 redirect ze starego na nowy) — final URL reklamy i 3 sitelinki (Talk to Sales, License Spec, How It Works) nadal wskazywały na stary, przekierowujący adres. Google Ads nie wykrywa taga niezawodnie przez redirect, więc kampania dalej nie serwowała mimo statusu "Enabled".
+
+**Wniosek:** jeśli strona produktowa dostanie nowy slug (np. przy pracach SEO/i18n), trzeba ręcznie zaktualizować final URL + sitelinki w Google Ads — redirect 301 nie wystarcza, Ads traktuje to jako brak taga. Sprawdzać final URL-e przy każdej zmianie struktury URL na stronie, nie tylko przy starcie kampanii.
+
+**Naprawa:** final URL i sitelinki `#pilot`/`#license`/`#platform` podmienione na `/products/xenia-white-label-mobile-app-rag` (anchory istnieją na nowej stronie, zweryfikowane).
+
 ## Do zrobienia / do obserwowania
 
 - [ ] Sprawdzić po ~3h czy conversion action "Form" (Website) przeszła weryfikację.

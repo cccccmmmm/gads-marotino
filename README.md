@@ -104,3 +104,21 @@ Po naprawieniu płatności diagnostyka nadal pokazywała czerwony błąd **"Your
 - [ ] Rozważyć banery/PMax jako kampanię równoległą, jeśli powstaną assety graficzne.
 - [ ] Zdecydować docelowy budżet dzienny po zobaczeniu realnego CPC/CPA z pierwszego tygodnia (start: €20/dzień to smoke test, nie budżet docelowy).
 - [ ] Ustawić alert/przegląd tygodniowy leadów z formularza `xenia-pilot` (Netlify Forms dashboard) vs conversions w Google Ads — porównać czy się zgadzają.
+- [ ] Po zebraniu pierwszych realnych konwersji: wrócić z bid strategy na "Maximize conversions" (patrz incydent 31.08.2026 niżej).
+
+## Incydent 31.08.2026 — kampania 0 impressions od startu, naprawione
+
+**Objaw:** Dzień po starcie (30.08) kampania miała **0 impressions / 0 clicks** w całej Florydzie mimo Enabled + budżetu. Diagnostyka Google Ads pokazywała ostrzeżenie **"Conversion tracking setup is incomplete"** i status kampanii **"Eligible (Limited)"**.
+
+**Przyczyna:** Bid strategy to **"Maximize conversions"**, ale konto miało dwie sprzeczne primary conversion actions, obie bez danych:
+1. **"Lead form - Submit"** (Google hosted, Primary) — widmo po kreatorze kampanii; kampania nie ma żadnego Lead Form asset (to Search-only z sitelinkami), więc ta akcja nigdy nie mogła nic zebrać.
+2. **"Form" (Website, Primary)** — prawdziwe źródło (formularz `xenia-pilot` na stronie), ale status **"Inactive / Unverified conversion"** — Google nie widział jeszcze wizyty na stronie z tagiem po starcie kampanii.
+
+Efekt: strategia "Maximize conversions" nie miała żadnego sygnału do optymalizacji, więc Google Ads świadomie ograniczał serwowanie reklam do ~zera. Błędne koło: brak impressions → brak kliknięć → brak wizyt na `/products/xenia` → tag nigdy się nie weryfikuje → tracking "incomplete" → kampania dalej ograniczona.
+
+**Naprawa (wykonana bezpośrednio w panelu Google Ads):**
+1. Ręcznie odwiedzona strona `/products/xenia`, żeby wywołać gtag.js (`G-JT28P4C0LD`) i przerwać błędne koło — potwierdzony żywy hit `page_view` (204) do `region1.analytics.google.com` z sygnałem `ads-audiences`. Weryfikacja "Form" powinna przejść w ciągu ~3h od tego triggera.
+2. **"Lead form - Submit"** przełączone z Primary na **Secondary action** (Conversion actions → Action optimization) — nie blokuje już optymalizacji ani nie liczy się do account-default goal.
+3. Bid strategy kampanii zmieniona z **"Maximize conversions"** na **"Maximize clicks"** — kampania może się wyświetlać bez czekania na dane konwersji. Do przywrócenia na "Maximize conversions", gdy zbiorą się pierwsze realne konwersje z formularza.
+
+**Do zapamiętania na przyszłość:** kreator "Submit lead form" w Google Ads tworzy domyślnie Google-hosted Lead Form conversion action nawet gdy kampania nie ma żadnego Lead Form asset — trzeba to ręcznie zdezaktywować/przełączyć na Secondary przy starcie każdej nowej kampanii z tym celem, inaczej zafałszowuje sygnał optymalizacji obok prawdziwej konwersji ze strony.

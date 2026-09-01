@@ -105,14 +105,29 @@ Po naprawie redirecta błąd "Your website is missing a Google tag" **dalej się
 
 **Wniosek na przyszłość:** przy kampanii Google Ads z celem "Submit lead form" / conversion tracking na stronie **zawsze dodać dedykowany tag AW-XXXXXXXXX w GTM** (Tag type: "Google Tag"), nie polegać na tym że wspólny tag GA4 wystarczy — Google Ads i GA4 to osobne ID mimo współdzielonego mechanizmu gtag.js. Diagnostyka Ads potrzebuje do ~3h żeby zweryfikować nowy tag po publikacji.
 
+## Prawdziwy, ostateczny root cause: auto-wykrywany "Form" conversion action nigdy się nie zweryfikuje (01.09.2026)
+
+Po dodaniu taga AW-18418762437 błąd "missing Google tag" **nadal się utrzymywał** po ponad 24h — zbyt długo jak na zwykłe opóźnienie weryfikacji (~3h). Sieciowo potwierdzone (DevTools network), że tag faktycznie strzela poprawnie na żywo (`gtag/js?id=AW-18418762437`, realny hit `google.com/ccm/collect?...tid=AW-18418762437`). Status kampanii w Google Ads to dosłownie **"Eligible (Misconfigured)"** — to aktywnie ogranicza serwowanie, nie tylko kosmetyczny warning.
+
+**Prawdziwa przyczyna:** account-default primary conversion action **"Form"** (Website, auto-utworzona przez kreator kampanii 30.08) nasłuchuje na **natywne zdarzenie `submit` formularza** na `marotino.com/products/xenia` (Google's automatic form-detection). Ale strona **nie wysyła natywnego submitu** — JS w `xenia-white-label-mobile-app-rag.astro` robi `e.preventDefault()` i zamiast tego wysyła `fetch()` w tle na `/netlify-forms.html` (patrz pułapka wyżej). Automatyczna detekcja Google nigdy nie widzi natywnego submitu, więc ta konkretna akcja **nigdy się nie zweryfikuje, niezależnie ile się czeka** — to nie kwestia czasu, tylko strukturalna niezgodność.
+
+**Naprawa (bez zmian w kodzie strony — kod już wysyłał właściwy sygnał):**
+1. Kod strony **już** robił `window.dataLayer.push({event: 'generate_lead', form_name: 'xenia', ...})` po udanym `fetch()` (ten sam kontrakt co `/contact`, patrz `xenia-white-label-mobile-app-rag.astro` ~linia 4136). GTM ma już trigger `CE - generate_lead` podpięty pod GA4 od 10.08.2026 — działający, sprawdzony kanał.
+2. W Google Ads utworzona nowa conversion action **"Xenia Lead Submitted (generate_lead)"** (Website, Manually with code, Primary), conversion label `AW-18418762437/9eaGCIL32-scEMWF4M5E`.
+3. W GTM-5JRBQF9N dodany tag **"Google Ads Conversion Tracking"** (Conversion ID `18418762437` — bez prefixu "AW-" w tym polu, Conversion Label `9eaGCIL32-scEMWF4M5E`), fire na tym samym triggerze `CE - generate_lead`. Opublikowane jako **Version 4** (01.09.2026, 08:50).
+4. Martwa akcja **"Form"** zdemotowana z Primary na **Secondary** (nadal widoczna w "All conversions", ale nie blokuje już celu "Submit lead forms").
+
+**Wniosek na przyszłość:** jeśli formularz na stronie wysyła się przez JS `fetch()`/AJAX zamiast natywnego `<form>` submit (częste przy custom walidacji, Netlify Forms via AJAX, SPA), **auto-wykrywana "Website" conversion action Google Ads nigdy nie zadziała** — trzeba ręcznie stworzyć conversion action typu "Manually with code" i podpiąć pod istniejące zdarzenie sukcesu (dataLayer push / custom event), najlepiej reużywając trigger już używany przez GA4, nie duplikować logiki w kodzie strony. Objaw ("Eligible (Misconfigured)", 0 impressions mimo Enabled) wygląda identycznie jak zwykłe opóźnienie weryfikacji taga — rozróżnić można tylko sprawdzając czy strona w ogóle wysyła natywny submit (DevTools → Elements → sprawdzić czy jest `preventDefault()` na formularzu).
+
 ## Do zrobienia / do obserwowania
 
-- [ ] Sprawdzić po ~3h czy conversion action "Form" (Website) przeszła weryfikację.
+- [ ] Sprawdzić za kilka godzin czy status kampanii zmienił się z "Eligible (Misconfigured)" na normalny "Eligible" i czy zaczęły się impressions.
 - [ ] Po pierwszym tygodniu: sprawdzić czy geo Floryda faktycznie łapie relewantny ruch, czy trzeba rozszerzyć/zawęzić.
 - [ ] Rozważyć banery/PMax jako kampanię równoległą, jeśli powstaną assety graficzne.
 - [ ] Zdecydować docelowy budżet dzienny po zobaczeniu realnego CPC/CPA z pierwszego tygodnia (start: €20/dzień to smoke test, nie budżet docelowy).
 - [ ] Ustawić alert/przegląd tygodniowy leadów z formularza `xenia-pilot` (Netlify Forms dashboard) vs conversions w Google Ads — porównać czy się zgadzają.
-- [ ] Po zebraniu pierwszych realnych konwersji: wrócić z bid strategy na "Maximize conversions" (patrz incydent 31.08.2026 niżej).
+- [ ] Po zebraniu pierwszych realnych konwersji z "Xenia Lead Submitted": wrócić z bid strategy na "Maximize conversions" (patrz incydent 31.08.2026 wyżej).
+- [ ] Rozważyć usunięcie/wyłączenie martwej akcji "Form" (Secondary) po potwierdzeniu że nowa akcja działa — żeby nie zaśmiecać listy conversion actions.
 
 ## Incydent 31.08.2026 — kampania 0 impressions od startu, naprawione
 

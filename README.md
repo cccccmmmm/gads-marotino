@@ -119,9 +119,19 @@ Po dodaniu taga AW-18418762437 błąd "missing Google tag" **nadal się utrzymyw
 
 **Wniosek na przyszłość:** jeśli formularz na stronie wysyła się przez JS `fetch()`/AJAX zamiast natywnego `<form>` submit (częste przy custom walidacji, Netlify Forms via AJAX, SPA), **auto-wykrywana "Website" conversion action Google Ads nigdy nie zadziała** — trzeba ręcznie stworzyć conversion action typu "Manually with code" i podpiąć pod istniejące zdarzenie sukcesu (dataLayer push / custom event), najlepiej reużywając trigger już używany przez GA4, nie duplikować logiki w kodzie strony. Objaw ("Eligible (Misconfigured)", 0 impressions mimo Enabled) wygląda identycznie jak zwykłe opóźnienie weryfikacji taga — rozróżnić można tylko sprawdzając czy strona w ogóle wysyła natywny submit (DevTools → Elements → sprawdzić czy jest `preventDefault()` na formularzu).
 
+## Prawdziwy, PRAWDZIWY ostateczny blocker: niewypełniony formularz zgodności UE (01.09.2026)
+
+Po wszystkich powyższych naprawach (tag, conversion action) kampania **nadal** miała 0 impressions — ponad 3 dni od startu. Wszystkie elementy (keywords, ad, ad group, billing) pokazywały "Eligible" pojedynczo, ale kampania jako całość nie serwowała ani jednej reklamy.
+
+**Prawdziwa przyczyna:** w **Admin → Policy → Account** konto miało niewypełnione, obowiązkowe pytanie regulacyjne: *"Plan to run European Union political ads?"* — wymagane przez prawo UE, bo profil płatności to Marotino CY LTD (Cypr = UE). To nie było opcjonalne zadanie "verification" (te są faktycznie opcjonalne) — to osobna, obowiązkowa deklaracja, która najwyraźniej blokowała serwowanie całej kampanii dopóki nie została odpowiedziana.
+
+**Naprawa:** Admin → Policy → Account → odpowiedziane "No, I don't plan to use this account to run EU political ads". Natychmiast po tym (w ciągu godziny) kampania zaczęła serwować: pierwszego dnia 18 impressions, 2 clicks, €7.72 kosztu.
+
+**Wniosek na przyszłość:** jeśli konto Google Ads ma profil płatności zarejestrowany w UE (nawet gdy kampania celuje poza UE, jak tu Floryda), **sprawdzić Admin → Policy → Account przy starcie każdej nowej kampanii** — nieodpowiedziane pytanie o EU political ads może cicho blokować serwowanie bez żadnego wyraźnego komunikatu w diagnostyce kampanii. To ukryty, osobny od reszty diagnostyki mechanizm.
+
 ## Do zrobienia / do obserwowania
 
-- [ ] Sprawdzić za kilka godzin czy status kampanii zmienił się z "Eligible (Misconfigured)" na normalny "Eligible" i czy zaczęły się impressions.
+- [x] ~~Sprawdzić za kilka godzin czy status kampanii zmienił się z "Eligible (Misconfigured)" na normalny "Eligible" i czy zaczęły się impressions.~~ **Rozwiązane 01.09.2026** — patrz wyżej.
 - [ ] Po pierwszym tygodniu: sprawdzić czy geo Floryda faktycznie łapie relewantny ruch, czy trzeba rozszerzyć/zawęzić.
 - [ ] Rozważyć banery/PMax jako kampanię równoległą, jeśli powstaną assety graficzne.
 - [ ] Zdecydować docelowy budżet dzienny po zobaczeniu realnego CPC/CPA z pierwszego tygodnia (start: €20/dzień to smoke test, nie budżet docelowy).

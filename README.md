@@ -15,6 +15,7 @@ Uruchomiona: **30.08.2026**.
 - Cel konwersji: **Submit lead form** — realny formularz na stronie (`xenia-pilot`, Netlify Forms), nie telefon.
 - Billing: profil płatności **Marotino CY LTD** (Cyprus, VAT CY60017620T), Postpay, karta Visa …9422.
 - Status: **Enabled**, w fazie "Bid strategy learning" (normalne pierwsze dni).
+- Konwersje: **przeprojektowane na server-side** (05.09.2026) — patrz sekcja niżej. Google Ads upload czeka na **Basic Access** developer tokena (wniosek złożony, Google odpowiada ~5 dni roboczych); GA4 (Measurement Protocol) już działa niezależnie.
 
 ---
 
@@ -129,6 +130,32 @@ Po wszystkich powyższych naprawach (tag, conversion action) kampania **nadal** 
 
 **Wniosek na przyszłość:** jeśli konto Google Ads ma profil płatności zarejestrowany w UE (nawet gdy kampania celuje poza UE, jak tu Floryda), **sprawdzić Admin → Policy → Account przy starcie każdej nowej kampanii** — nieodpowiedziane pytanie o EU political ads może cicho blokować serwowanie bez żadnego wyraźnego komunikatu w diagnostyce kampanii. To ukryty, osobny od reszty diagnostyki mechanizm.
 
+## Fantomowe konwersje i przejście na server-side tracking (05.09.2026)
+
+**Objaw:** w GA4/Google Ads pojawiła się konwersja `generate_lead`, ale w Netlify Forms (`xenia-pilot`) **nie było żadnego odpowiadającego submission** (ani verified, ani spam) w tym samym oknie czasowym. Sesja miała `First user source/medium = (not set)` z ikoną ostrzeżenia i kanał `Unassigned` w GA4 explore — typowy odcisk bota, nie realnego użytkownika.
+
+**Prawdziwa przyczyna:** klient (JS w `xenia-white-label-mobile-app-rag.astro`) strzelał `dataLayer.push({event: 'generate_lead', ...})` na podstawie samego `if (res.ok)` z AJAX POST-a do `/netlify-forms.html`. **2xx z tego fetcha potwierdza tylko, że request nie zwrócił błędu sieciowego — nie potwierdza, że Netlify faktycznie zapisał submission.** Netlify po cichu odrzuca spam/honeypot submissions, ale wciąż odpowiada 200. Bot, który POST-uje bezpośrednio na ten endpoint (pomijając realny formularz i jego walidację/honeypot), mógł więc wywołać "sukces" po stronie JS bez zostawienia śladu w Netlify Forms.
+
+**Naprawa — przeniesienie całej logiki konwersji na serwer:**
+1. Usunięty client-side `dataLayer.push('generate_lead')` po `res.ok`. Formularz nadal wysyła się tak samo (AJAX na `/netlify-forms.html`), ale **nie odpala już żadnej konwersji sam z siebie**.
+2. Dodane ukryte pola `gclid` i `ga_client_id` do formularza `xenia-pilot` (czytane z URL / cookie `_gcl_aw` i cookie `_ga`), wypełniane tuż przed każdym submitem (nie tylko raz przy załadowaniu strony — `form.reset()` po sukcesie czyściłby je przy drugim submicie tej samej sesji).
+3. Nowy endpoint **`src/pages/api/lead-conversion.ts`** (Astro API route, deployowany jako część funkcji "Astro SSR" na Netlify) — jedyne miejsce, które faktycznie odpala konwersję. Chroniony shared-secretem w query stringu (`?key=...`, zmienna `LEAD_WEBHOOK_SECRET`).
+4. Skonfigurowany **prawdziwy Netlify Forms outgoing webhook** (Site configuration → Notifications → Form submission notifications, event "New form submission", form **`xenia-pilot`**) wskazujący na `https://marotino.com/api/lead-conversion?key=<LEAD_WEBHOOK_SECRET>`. To jedyne wywołanie, które Netlify robi **dopiero po** zweryfikowaniu i zapisaniu submission — więc jest to prawdziwe źródło prawdy "lead się faktycznie wydarzył", którego zabrakło w starym mechanizmie.
+5. Endpoint fan-outuje zweryfikowany event do dwóch miejsc:
+   - **GA4 Measurement Protocol** (`GA4_MEASUREMENT_ID` / `GA4_API_SECRET`) — działa od razu, niezależne od Google Ads.
+   - **Google Ads `uploadClickConversions`** (offline click conversion import, `gclid` + conversion action `7742094210` na koncie 846-403-8850) — wymaga OAuth (refresh token) i developer tokena z **Basic Access** (patrz niżej).
+
+**Zmienne środowiskowe ustawione w Netlify (Site configuration → Environment variables, All scopes / Same value for all deploy contexts):** `LEAD_WEBHOOK_SECRET`, `GA4_MEASUREMENT_ID`, `GA4_API_SECRET`, `GOOGLE_ADS_DEVELOPER_TOKEN`, `GOOGLE_ADS_LOGIN_CUSTOMER_ID` (MCC 331-108-1372), `GOOGLE_ADS_CUSTOMER_ID` (846-403-8850 bez myślników → `8464038850`), `GOOGLE_ADS_CONVERSION_ACTION_ID` (`7742094210`), `GOOGLE_ADS_CLIENT_ID`, `GOOGLE_ADS_CLIENT_SECRET`, `GOOGLE_ADS_REFRESH_TOKEN` (OAuth client + refresh token wygenerowane przez Google Cloud project pod `menusso-402408`, autoryzowane przez MCC 331-108-1372 → konto 846-403-8850; refresh token zdobyty ręcznie przez OAuth 2.0 Playground, bo Google wymagał utworzenia passkey przy autoryzacji — krok, którego nie da się zautomatyzować).
+
+**Pułapka po drodze:** przy pierwszym zapisie `GOOGLE_ADS_REFRESH_TOKEN` w UI Netlify wartość **nie zapisała się** (formularz pokazywał "0 values in all deploy contexts" mimo widocznego "Create variable") — trzeba było usunąć i dodać ponownie, wpisując wartość przez kliknięcie w pole + wpisanie znak-po-znaku zamiast jednorazowego "fill" całej wartości na raz (coś w formularzu Netlify nie rejestrowało programatycznego ustawienia value bez realnych zdarzeń klawiatury). **Wniosek na przyszłość:** po każdym zapisie sekretu w Netlify UI zweryfikować, że pole faktycznie pokazuje "X value(s) in Y deploy context(s)", nie zakładać sukcesu tylko po komunikacie "Create variable" bez błędu.
+
+**Aktualny blocker (poza naszą kontrolą):** developer token Google Ads ma poziom **"Explorer Access"** — pozwala wywoływać API tylko na testowych/sandboxowych kontach, nie na prawdziwe konto 846-403-8850. Złożony wniosek o **"Basic Access"** (formularz Google, 04.09.2026), odpowiedź w ciągu ~5 dni roboczych. Dopóki nie przyjdzie zgoda, `uploadClickConversions` będzie zwracać błąd autoryzacji przy każdej próbie — kod to łapie (`try/catch`) i loguje, **nie crashuje** endpointu ani nie blokuje reszty fan-outu (GA4 nadal dostaje event). Po przyznaniu Basic Access nie trzeba nic zmieniać w kodzie — sam upload zacznie przechodzić.
+
+**Zweryfikowane działanie endpointu na żywo (05.09.2026, po deployu commit `039070c`):**
+- brak/zły `?key=` → `403 Forbidden`.
+- submission z formularza `contact` (nie `xenia-pilot`) → `200 OK`, treść `"OK (ignored form)"` — filtr po `form_name` działa.
+- submission `xenia-pilot` bez `gclid`/`ga_client_id` w danych → `200 OK`, nie crashuje (graceful skip zamiast wywalenia się).
+
 ## Do zrobienia / do obserwowania
 
 - [x] ~~Sprawdzić za kilka godzin czy status kampanii zmienił się z "Eligible (Misconfigured)" na normalny "Eligible" i czy zaczęły się impressions.~~ **Rozwiązane 01.09.2026** — patrz wyżej.
@@ -138,6 +165,8 @@ Po wszystkich powyższych naprawach (tag, conversion action) kampania **nadal** 
 - [ ] Ustawić alert/przegląd tygodniowy leadów z formularza `xenia-pilot` (Netlify Forms dashboard) vs conversions w Google Ads — porównać czy się zgadzają.
 - [ ] Po zebraniu pierwszych realnych konwersji z "Xenia Lead Submitted": wrócić z bid strategy na "Maximize conversions" (patrz incydent 31.08.2026 wyżej).
 - [ ] Rozważyć usunięcie/wyłączenie martwej akcji "Form" (Secondary) po potwierdzeniu że nowa akcja działa — żeby nie zaśmiecać listy conversion actions.
+- [ ] Sprawdzić maila / status wniosku o **Basic Access** developer tokena (złożony 04.09.2026, ~5 dni roboczych) — po przyznaniu zweryfikować, że `uploadClickConversions` w `/api/lead-conversion` faktycznie przechodzi (sprawdzić Netlify function logs po pierwszym realnym submicie `xenia-pilot`).
+- [ ] Po przyznaniu Basic Access: zweryfikować że conversion action `7742094210` faktycznie zbiera dane w Google Ads (Conversions → Xenia Lead Submitted) i porównać liczbę z Netlify Forms dashboard dla `xenia-pilot`.
 
 ## Incydent 31.08.2026 — kampania 0 impressions od startu, naprawione
 

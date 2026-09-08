@@ -17,6 +17,8 @@ Uruchomiona: **30.08.2026**.
 - Status: **Enabled**, w fazie "Bid strategy learning" (normalne pierwsze dni). Wyniki 1-7.09: 1620 impr., 80 kliknięć, CTR 4,94%, śr. CPC €1,90, koszt €151,99.
 - Konwersje: **przeprojektowane na server-side** (05.09.2026) — patrz sekcja niżej. Google Ads upload czeka na **Basic Access** developer tokena (wniosek złożony, Google odpowiada ~5 dni roboczych); GA4 (Measurement Protocol) już działa niezależnie.
 - **08.09.2026:** naprawiony GTM trigger, który mieszał konwersje "Xenia Lead Submitted" z chat-widgetem i formularzem contact (patrz sekcja niżej) — GTM Version 5, live.
+- **04.09.2026:** formularz `xenia-pilot` uproszczony z 6 pól (property, email, rooms, tier, message + honeypot) do 4 wymaganych pól (imię, email, telefon, nazwa hotelu) — usunięte pole `message`. Deploy `78f91fb`, zweryfikowany na żywo 08.09.2026: formularz i GTM działają bez regresji.
+- **08.09.2026:** dodane 4 negatywne słowa kluczowe na poziomie kampanii (exact match): `best ai for business`, `conversational ai platform`, `ai service`, `best ai platforms for business` — generyczne zapytania o "AI dla biznesu" bez intencji hotelarskiej, 0 konwersji, ~€21 skonsumowanego budżetu w tygodniu 1-7.09. Celowo zostawione `ai for customers` i `ai business` (po 1 konwersji każde, mimo niskiej relewancji) do obserwacji — zbyt mało danych żeby wykluczyć czy to prawdziwe konwersje.
 - **Nowy wymóg Google (08.09.2026):** "Verify your identity" (weryfikacja reklamodawcy) do **2026-10-07**, inaczej część reklam może zostać wstrzymana/ograniczona. Osobny proces od developer tokena — wymaga ręcznej weryfikacji w Google Ads (Admin → dokumenty/pytania o firmę), nie da się zautomatyzować.
 
 ---
@@ -173,6 +175,18 @@ Efekt: konwersja "Xenia Lead Submitted" liczyła (i po fixie z 05.09 liczy **wy�
 **Ważna świadoma konsekwencja:** ponieważ formularz Xenia **celowo** już nie wysyła client-side `dataLayer.push` (to był fix z 05.09, patrz wyżej — optimistic client push to źródło fantomowych konwersji), nowy trigger `CE - generate_lead (xenia)` **obecnie nic nie odpala** — nikt nie publikuje zdarzenia z `form_name: 'xenia'` po stronie klienta. To jest zamierzone i poprawne: prawdziwe śledzenie konwersji Xenia dla Google Ads żyje teraz **wyłącznie server-side** w `/api/lead-conversion.ts` (`uploadClickConversions`, triggerowane przez zweryfikowany webhook Netlify Forms), nie w GTM. GTM-owy tor jest zachowany jako czysty/scoped na wypadek gdyby ktoś w przyszłości chciał dodać dodatkowy client-side sygnał, ale nie jest to obecny plan.
 
 **Wniosek na przyszłość:** przy podpinaniu nowej Google Ads conversion action pod istniejący GTM trigger — zawsze sprawdzić czy trigger jest scoped do konkretnego `form_name`/eventu, czy łapie generyczne zdarzenie współdzielone przez wiele formularzy/widgetów na stronie. Reużywanie tego samego nazwanego eventu (`generate_lead`) dla wielu niepowiązanych źródeł leadów (kontakt, czat, produkt) jest wygodne dla GA4 (jeden "key event"), ale niebezpieczne dla per-kampanijnych conversion actions w Google Ads, jeśli trigger nie filtruje po `form_name`.
+
+## Plan poprawy konwersji (08.09.2026)
+
+Punkt wyjścia: tydzień 1-7.09 — 80 kliknięć, €151.99, konw. rate 2.50% wg Ads (dane niepewne, patrz sekcja o fantomowych konwersjach — realny licznik to server-side `/api/lead-conversion.ts`, wciąż czeka na Basic Access). Priorytety w kolejności wykonania:
+
+1. **Zrobione — formularz.** 6 pól → 4 pola (imię, email, telefon, hotel). Mniej tarcia = więcej ukończonych submitów przy tym samym ruchu. To był największy pojedynczy dźwigień, bo to jedyny etap lejka w pełni pod naszą kontrolą.
+2. **Zrobione — negatywy.** Odcięte 4 najgorsze frazy generyczne ("ai platform/service/for business" bez kontekstu hotelarskiego) — ~21€/tydzień oszczędności, realokowane na relewantne kliknięcia.
+3. **Zrobione — geo.** Floryda i Nowy Jork usunięte jako osobne lokalizacje (były podzbiorem "East Coast of the United States", zero utraty zasięgu, czystszy reporting).
+4. **Do zrobienia — dopasowanie przekazu reklama↔strona.** Reklamy mówią o "AI recepcjoniście" ogólnie; sprawdzić czy nagłówki RSA i landing page (sekcja hero) używają tych samych słów co najlepiej konwertujące frazy (`prohost ai`, `online reservation system`, `resort management`) — Google nagradza spójność query↔ad↔landing wyższym Quality Score i niższym CPC.
+5. **Blocker poza naszą kontrolą — Basic Access developer tokena.** Dopóki nie przyjdzie zgoda (wniosek 04.09, ~5 dni robocze — termin mija ok. 11.09), Google Ads **nie ma żadnego realnego sygnału konwersji do optymalizacji pod "Maximize conversions"**. To jest właściwy priorytet #1 do przyspieszenia: sprawdzić maila / status wniosku jak najszybciej, bo bez tego każda optymalizacja kampanii (bid strategy, keywords) strzela w ciemno na podstawie zaszumionych/fantomowych danych.
+6. **Do zrobienia po punkcie 5 — bid strategy.** Wrócić z "Maximize clicks" na "Maximize conversions" dopiero gdy server-side conversion (`Xenia Lead Submitted`, action `7742094210`) ma realne dane napływające z `uploadClickConversions` — inaczej strategia znowu zdusi serwowanie (patrz incydent 31.08).
+7. **Odłożone — remarketing/Display.** Assety graficzne gotowe, ale lista remarketingowa wymaga ~100 aktywnych userów w 30 dni (Audience Manager) — przy 80 kliknięciach/tydzień to kilka tygodni. Nie uruchamiać przedwcześnie, zimny ruch na Display dla niszowego B2B konwertuje słabo.
 
 ## Do zrobienia / do obserwowania
 

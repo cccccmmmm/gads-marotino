@@ -14,8 +14,10 @@ Uruchomiona: **30.08.2026**.
 - Budżet: **€20/dzień** (świadomy smoke test, nie docelowy budżet).
 - Cel konwersji: **Submit lead form** — realny formularz na stronie (`xenia-pilot`, Netlify Forms), nie telefon.
 - Billing: profil płatności **Marotino CY LTD** (Cyprus, VAT CY60017620T), Postpay, karta Visa …9422.
-- Status: **Enabled**, w fazie "Bid strategy learning" (normalne pierwsze dni).
+- Status: **Enabled**, w fazie "Bid strategy learning" (normalne pierwsze dni). Wyniki 1-7.09: 1620 impr., 80 kliknięć, CTR 4,94%, śr. CPC €1,90, koszt €151,99.
 - Konwersje: **przeprojektowane na server-side** (05.09.2026) — patrz sekcja niżej. Google Ads upload czeka na **Basic Access** developer tokena (wniosek złożony, Google odpowiada ~5 dni roboczych); GA4 (Measurement Protocol) już działa niezależnie.
+- **08.09.2026:** naprawiony GTM trigger, który mieszał konwersje "Xenia Lead Submitted" z chat-widgetem i formularzem contact (patrz sekcja niżej) — GTM Version 5, live.
+- **Nowy wymóg Google (08.09.2026):** "Verify your identity" (weryfikacja reklamodawcy) do **2026-10-07**, inaczej część reklam może zostać wstrzymana/ograniczona. Osobny proces od developer tokena — wymaga ręcznej weryfikacji w Google Ads (Admin → dokumenty/pytania o firmę), nie da się zautomatyzować.
 
 ---
 
@@ -156,6 +158,22 @@ Po wszystkich powyższych naprawach (tag, conversion action) kampania **nadal** 
 - submission z formularza `contact` (nie `xenia-pilot`) → `200 OK`, treść `"OK (ignored form)"` — filtr po `form_name` działa.
 - submission `xenia-pilot` bez `gclid`/`ga_client_id` w danych → `200 OK`, nie crashuje (graceful skip zamiast wywalenia się).
 
+## GTM trigger mieszał konwersje Xenia z chat-widgetem i formularzem contact (08.09.2026)
+
+**Objaw:** mimo że w piątkowym fixie (05.09.2026, patrz sekcja wyżej) usunąłem client-side `dataLayer.push('generate_lead')` z formularza `xenia-pilot`, konwersja Google Ads **"Xenia Lead Submitted (generate_lead)"** dalej zbierała nowe konwersje (3 sztuki w oknie 6-8.09.2026) — mimo że formularz Xenia fizycznie już nic nie wysyła do dataLayer.
+
+**Przyczyna:** GTM trigger **`CE - generate_lead`** (podpięty pod ten conversion tag od 01.09.2026, patrz sekcja "Prawdziwy, ostateczny root cause" wyżej) nasłuchuje na **zdarzenie `generate_lead` bez żadnego filtra po `form_name`** ("This trigger fires on: All Custom Events"). Ten sam generyczny event `generate_lead` jest też wysyłany przez:
+- `src/pages/contact.astro` (formularz kontaktowy, `form_name: 'contact'`) — osobny formularz, inny cel.
+- `src/layouts/BaseLayout.astro` (widget czatu Chatwoot, `form_name: 'chat_widget'`) — fire raz na sesję przy **otwarciu** czatu, **na dowolnej stronie serwisu**, nie tylko `/products/xenia`.
+
+Efekt: konwersja "Xenia Lead Submitted" liczyła (i po fixie z 05.09 liczy **wyłącznie**) otwarcia czatu i submity formularza `contact` — czyli osoby, które kliknęły reklamę Xenia, ale nigdy nie wypełniły pilotażowego formularza. To był problem pomiarowy od 01.09.2026 (kiedy podpięto Ads-conversion pod ten sam współdzielony trigger co GA4), niezauważony bo wcześniej maskowany prawdziwym sygnałem z formularza Xenia.
+
+**Naprawa:** w GTM-5JRBQF9N (kontener marotino.com) dodany nowy trigger **`CE - generate_lead (xenia)`** — Custom Event `generate_lead`, warunek `{{DLV - form_name}} equals xenia` (zmienna `DLV - form_name` już istniała, użyta wcześniej przy budowie oryginalnego triggera). Tag **"Google Ads Conversion - Xenia Lead Submitted"** przepięty z `CE - generate_lead` na nowy, scoped trigger. Opublikowane jako **Version 5** (08.09.2026, 11:44).
+
+**Ważna świadoma konsekwencja:** ponieważ formularz Xenia **celowo** już nie wysyła client-side `dataLayer.push` (to był fix z 05.09, patrz wyżej — optimistic client push to źródło fantomowych konwersji), nowy trigger `CE - generate_lead (xenia)` **obecnie nic nie odpala** — nikt nie publikuje zdarzenia z `form_name: 'xenia'` po stronie klienta. To jest zamierzone i poprawne: prawdziwe śledzenie konwersji Xenia dla Google Ads żyje teraz **wyłącznie server-side** w `/api/lead-conversion.ts` (`uploadClickConversions`, triggerowane przez zweryfikowany webhook Netlify Forms), nie w GTM. GTM-owy tor jest zachowany jako czysty/scoped na wypadek gdyby ktoś w przyszłości chciał dodać dodatkowy client-side sygnał, ale nie jest to obecny plan.
+
+**Wniosek na przyszłość:** przy podpinaniu nowej Google Ads conversion action pod istniejący GTM trigger — zawsze sprawdzić czy trigger jest scoped do konkretnego `form_name`/eventu, czy łapie generyczne zdarzenie współdzielone przez wiele formularzy/widgetów na stronie. Reużywanie tego samego nazwanego eventu (`generate_lead`) dla wielu niepowiązanych źródeł leadów (kontakt, czat, produkt) jest wygodne dla GA4 (jeden "key event"), ale niebezpieczne dla per-kampanijnych conversion actions w Google Ads, jeśli trigger nie filtruje po `form_name`.
+
 ## Do zrobienia / do obserwowania
 
 - [x] ~~Sprawdzić za kilka godzin czy status kampanii zmienił się z "Eligible (Misconfigured)" na normalny "Eligible" i czy zaczęły się impressions.~~ **Rozwiązane 01.09.2026** — patrz wyżej.
@@ -167,6 +185,8 @@ Po wszystkich powyższych naprawach (tag, conversion action) kampania **nadal** 
 - [ ] Rozważyć usunięcie/wyłączenie martwej akcji "Form" (Secondary) po potwierdzeniu że nowa akcja działa — żeby nie zaśmiecać listy conversion actions.
 - [ ] Sprawdzić maila / status wniosku o **Basic Access** developer tokena (złożony 04.09.2026, ~5 dni roboczych) — po przyznaniu zweryfikować, że `uploadClickConversions` w `/api/lead-conversion` faktycznie przechodzi (sprawdzić Netlify function logs po pierwszym realnym submicie `xenia-pilot`).
 - [ ] Po przyznaniu Basic Access: zweryfikować że conversion action `7742094210` faktycznie zbiera dane w Google Ads (Conversions → Xenia Lead Submitted) i porównać liczbę z Netlify Forms dashboard dla `xenia-pilot`.
+- [ ] Zrobić **advertiser verification** w Google Ads (Admin → Policy) przed **2026-10-07**, inaczej część reklam może zostać wstrzymana/ograniczona. Wymaga ręcznego działania (dokumenty/pytania o firmę), nie da się zautomatyzować.
+- [ ] Po zebraniu pierwszych realnych server-side konwersji Xenia (po Basic Access): rozważyć, czy warto reaktywować client-side sygnał GTM (`CE - generate_lead (xenia)` — obecnie nic go nie publikuje) jako dodatkowe źródło, czy zostać wyłącznie przy server-side jako jedynym źródle prawdy.
 
 ## Incydent 31.08.2026 — kampania 0 impressions od startu, naprawione
 

@@ -653,3 +653,110 @@ To bezpośrednio wyjaśnia, dlaczego exact match ma zero: `[system integration s
 ### Poprawka do dokumentacji
 
 Grupa reklam 1 nazywa się w koncie faktycznie **„Ad group 1"** (nazwa domyślna z kreatora), a nie „integracje" — w README figurowała pod nazwą opisową. Warto ją przemianować, żeby raporty były czytelne, skoro grup jest już dwie.
+
+---
+
+## Audyt + interwencja nocna (15.09.2026)
+
+Pełny audyt konfiguracji kampanii 2 po pierwszym dniu, z natychmiastowym wdrożeniem poprawek. Kontekst: w USA była noc, celem było złapanie sensownego pace'u na amerykański poranek.
+
+### Co audyt potwierdził jako poprawne (nie ruszane)
+
+| element | stan | wniosek |
+|---|---|---|
+| Limit max CPC | **€8.00, faktycznie zapisany** | Punkt 7 z listy „do dokończenia" z 14.09 zamknięty — blokada „Confirm it's you" nie zjadła tego ustawienia. Realna śr. CPC €3.44 jest mocno pod limitem, **więc limit nie jest obecnie blokerem** i świadomie go NIE podnosimy: przy €12/dzień klik za €8 to 1.5 klika dziennie, podnoszenie sufitu byłoby walką z arytmetyką. |
+| Sieci | tylko Google Search | bez Display, bez Search Partners — zgodnie z planem |
+| AI Max | wyłączony | zgodnie z decyzją z 14.09 |
+| Location options | Presence | zgodnie z poprawką z 14.09 |
+| Harmonogram reklam | całodobowy, bez korekt | patrz uwaga o strefie czasowej niżej |
+| Conversion goals | Account-default: Submit lead forms | OK; przy Maximize clicks nie ma to jeszcze wpływu na licytację |
+
+### Nowa pułapka strukturalna: Maximize clicks + fraza z homonimem = systematyczny zakup złego ruchu
+
+To jest właściwa diagnoza tego, co widzieliśmy w check-inie z rana. Nie chodziło tylko o to, że `"system integration services"` łapie automatykę przemysłową. Chodzi o **interakcję dwóch decyzji, z których każda osobno była słuszna**:
+
+1. **Maximize clicks** wybrano świadomie (lekcja z 31.08: Maximize conversions bez danych konwersji zdusiło Xenię do zera). Dobra decyzja.
+2. Fraza phrase `"system integration services"` weszła na podstawie researchu wolumenu. Też wygląda na dobrą decyzję.
+
+Ale Maximize clicks optymalizuje **liczbę kliknięć, nie ich trafność**. Znalazł najtańszą kieszeń ruchu w kampanii — zapytania o integratorów automatyki fabrycznej, gdzie software house nie konkuruje z nikim i klik jest tani — i wrzucił tam **cały** budżet. Dlatego grupa Shopify miała 0 impresji: nie dlatego, że przegrywała aukcje, ale dlatego, że **algorytm nigdy do niej nie doszedł**, mając tańsze kliki obok.
+
+**Wniosek na przyszłość:** przy Maximize clicks każda fraza, która może łapać inną branżę, jest nie tylko źródłem szumu — jest **magnesem na cały budżet**. Negatywy branżowe przy tej strategii licytacji nie są kosmetyką po tygodniu, tylko warunkiem, żeby kampania w ogóle testowała to, co chcieliśmy testować.
+
+### Wykonane zmiany
+
+**1. Negatywy branżowe — 34 frazy, poziom kampanii (44 → 78)**
+
+`fanuc`, `kuka`, `yaskawa`, `motoman`, `abb robot`, `rockwell`, `allen bradley`, `robot`, `robots`, `robotic`, `robotics`, `plc`, `plcs`, `scada`, `hmi`, `servo`, `cnc`, `conveyor`, `pneumatic`, `welding`, `machine vision`, `industrial automation`, `factory automation`, `automation integrator`, `automation integrators`, `systems integrator`, `systems integrators`, `system integrator`, `system integrators`, `controls integrator`, `control system integrator`, `panel builder`, `assembly line`, `manufacturing plant`.
+
+Dwie uwagi projektowe:
+
+- **`system integrator` / `systems integrator` jako negatyw NIE blokuje naszego `"system integration services"`** — negatyw broad wymaga obecności wszystkich swoich słów w zapytaniu, a „integrator" to inne słowo niż „integration". To jest najważniejszy negatyw z całej listy, bo trafia w rdzeń problemu.
+- **Negatywy nie łapią bliskich wariantów** (inaczej niż słowa kluczowe pozytywne) — dlatego na liście są osobno `robot`/`robots`/`robotic`/`robotics` i `plc`/`plcs`. Wpisanie samego `robot` zostawiłoby „robotics" przepuszczone.
+- Świadomie **pominięto** `siemens` i `abb` jako samodzielne negatywy — te firmy robią też software/PLM, a zapytanie o integrację Siemensa może być realnym leadem. Zablokowany jest tylko `abb robot`.
+
+**2. Rozbudowa słów kluczowych — 26 nowych (14 → 40)**
+
+Grupa `Integrations - API & ERP` (+14): frazy phrase dla tych, które miały tylko exact (`"api integration services"`, `"erp integration services"`, `"custom api development"`), plus zwalidowane w researchu z 14.09 a nieużyte: `salesforce integration services` (590 wyszukiwań!), `third party api integration`, `hubspot integration services`, `quickbooks integration services` — każde exact + phrase gdzie ma to sens. Dodatkowo `[software integration services]` / `"software integration services"`, `[erp integration company]`, `[api development company]`.
+
+Grupa `Ecommerce - Shopify` (+12): `"shopify developer near me"`, `"shopify maintenance"`, `"shopify erp integration"` (grupa miała 5 z 7 fraz tylko w exact — to współprzyczyna zera impresji), plus `shopify api integration` (exact+phrase), `[shopify app development]`, `[custom shopify development]`, `shopify integration services` (exact+phrase), `[shopify development company]`, `[shopify plus agency]`, `[ecommerce maintenance services]`.
+
+**Uczciwe oznaczenie:** `salesforce integration services` ma próg wejścia €12.50, powyżej naszego limitu €8 — dodane świadomie, bo limit działa jako twardy sufit (najwyżej nie wygramy aukcji, nie przepłacimy), a 590 wyszukiwań to największa pojedyncza pula w całym researchu. `[erp integration company]`, `[api development company]`, `[shopify development company]`, `[shopify plus agency]`, `[custom shopify development]`, `[shopify app development]` **nie były w researchu z 14.09** — to dodatki na intencji, do weryfikacji po pierwszych danych.
+
+Wszystkie 26 weszły w status **Pending / under review** — to normalna weryfikacja nowych słów, przechodzi zwykle w kilka godzin, czyli dokładnie w nocnym okienku. Żadne nie zostało odrzucone ani oflagowane jako „Low search volume".
+
+**3. Assety reklamowe — z 1 do 14 (kampania miała tylko business name!)**
+
+Audyt pokazał, że kampania od startu miała **dokładnie jeden asset**: business name „Marotino" (nadal `Pending` od 14.09, 1:15 PM). Zero sitelinków, zero callotów, zero structured snippets. Google flagował to dwoma osobnymi rekomendacjami.
+
+- **6 sitelinków** (każdy z 2 liniami opisu, wszystkie final URL-e sprawdzone `curl`em na 200, wszystkie unikalne): Free Discovery Call → `/contact`, Maintenance & Support → `/services/maintenance-support`, Legacy Modernization → `/services/legacy-modernization`, How We Work → `/process`, AI & Data Engineering → `/services/ai-data-engineering`, Fintech & Payments → `/services/fintech-solutions`. Google w formularzu wprost mówi: 2 wystarczą do wyświetlania, 6+ maksymalizuje performance — dlatego od razu 6.
+- **6 callotów**: Miami-Based Team, Fixed-Price Scope, Senior US Engineers, Free 30-Min Discovery, Full Code Ownership, Documented APIs.
+- **1 structured snippet**, header `Service catalog`, 6 wartości: System Integration, API Development, ERP & CRM Integration, Shopify Migration, Ecommerce Development, Maintenance & Support.
+
+To nie jest kosmetyka — rozszerzenia powiększają powierzchnię reklamy w SERP-ie, podnoszą CTR, a CTR wchodzi do Ad Rank. Przy tym budżecie tańszy klik z lepszego Quality Score jest realnym mechanizmem na więcej ruchu za te same €12.
+
+**4. Ad strength obu reklam**
+
+Tu audyt **odwrócił to, co było w README**: to grupa 1 miała „Poor", a grupa 2 „Average" — nie na odwrót. Poprawione wyżej w tym dokumencie.
+
+- Grupa 1: dodane 3 nagłówki z dosłownymi nowymi frazami (Salesforce Integration, Third Party API Integration, HubSpot & QuickBooks APIs), 3. opis, oraz **wypełnione puste Path 1/Path 2** → display URL to teraz `marotino.com/integrations/api-erp`. Wynik: **Poor → Average**. (W edytorze wskaźnik pokazywał „Good", po zapisie Google przeliczył na „Average" — wiążąca jest wartość po zapisie.)
+- Grupa 2: dodane 3 nagłówki (Shopify Developer Near Me, Shopify API Integration, Custom Shopify Development), 3. opis, ścieżka `marotino.com/shopify/development`. W edytorze **„Excellent"**, po zapisie status przeliczania. Google przy obu zapisach potwierdził brak zastrzeżeń policy.
+
+**Pułapka UI (nowa):** przycisk zapisu edytora reklamy to **„Save ad"**, nie „Save" — w DOM-ie jest jednocześnie kilkanaście nieaktywnych, ukrytych przycisków „Save" należących do innych paneli. Skrypt szukający pierwszego `Save` trafia w wyłączony i zapis cicho nie następuje. Druga pułapka: **ikona edycji reklamy pojawia się tylko po prawdziwym najechaniu myszą** (to samo co przy korektach stawek w Locations, patrz 14.09) — syntetyczne `mouseover` nie działa, trzeba realnego zdarzenia CDP. ID-ki reklam, gdy hover nie chce współpracować: grupa 1 `adId 824543077086` / `adGroupId 199848442949`, grupa 2 `adId 824544321969` / `adGroupId 200223584557`; edytor otwiera się bezpośrednio przez `/aw/ads/edit/search?...&adId=...&adGroupIdForAd=...`.
+
+**5. Nazwa grupy reklam**
+
+`Ad group 1` → **`Integrations - API & ERP`**. Pułapka: inline edytor nazwy ma własny przycisk Save w popupie; globalne szukanie przycisku „Save" na stronie klika coś innego i nazwa cicho się nie zapisuje (zdarzyło się przy pierwszej próbie). Trzeba scope'ować szukanie do kontenera inputa.
+
+### Znalezione, świadomie NIE zmienione
+
+- **Budżet został na €12/dzień.** To decyzja pieniężna Cezarego, nie techniczna. Przy śr. CPC €3.44 to ~3.5 klika dziennie — i to jest realny sufit pace'u, niezależnie od tego, jak dobrze ustawiona jest kampania. Jeśli oczekiwanie to „dobry pace" w sensie wolumenu, a nie trafności, to jedyna dźwignia to budżet.
+- **Bid strategy została na Maximize clicks** — zgodnie z lekcją z 31.08 nie wracamy na Maximize conversions dopóki nie ma realnych danych konwersji.
+- **Nie dodano harmonogramu reklam**, mimo że dla B2B kuszące jest ograniczenie do godzin pracy w USA. Powód: kampania jest **głodna impresji, nie przepalająca budżet na złe godziny** — zawężanie teraz dokręcałoby ograniczenie, które nie jest wąskim gardłem. Do rozważenia, gdy będą dane per godzina.
+- **Grupy nie zostały rozdzielone na osobne kampanie.** Rozdzielenie dałoby grupie Shopify gwarantowany budżet, ale €6+€6 zagłodziłoby obie. Najpierw negatywy — jeśli po nich Shopify nadal ma 0 impresji, wtedy rozdzielenie staje się uzasadnione.
+
+### Nowe ustalenie o koncie: strefa czasowa vs rynek — i tego nie da się naprawić
+
+Konto ma strefę **(GMT+03:00) Eastern European Time**, bo tak zostało założone (profil płatności Marotino CY LTD). Kampania celuje w USA. Oznacza to, że **dzień budżetowy zaczyna się i kończy o 17:00 czasu wschodniego USA**, czyli **przecina amerykański dzień pracy na pół**: poniedziałek 9:00–17:00 ET leży w dwóch różnych dniach budżetowych.
+
+**Strefy czasowej konta Google Ads nie można zmienić po założeniu.** To trwała konsekwencja setupu cypryjskiego — ta sama decyzja, która wcześniej wygenerowała ukryty bloker z formularzem EU political ads (01.09) i zera w Keyword Plannerze (14.09). Nie jest to katastrofa (Google rozkłada budżet według przewidywanego ruchu w dobie, nie wypala go na starcie), ale przy ocenie dziennych wyników trzeba pamiętać, że „dzień" w raportach to nie amerykański dzień pracy.
+
+### Czego się spodziewać na rano — i jak to czytać
+
+Realistycznie: nowe słowa wychodzą z review w kilka godzin, negatywy działają natychmiast, assety po zatwierdzeniu. Więc na amerykański poranek kampania powinna mieć **istotnie szerszą pulę aukcji i odcięty ruch przemysłowy**.
+
+**Czego NIE traktować jako sukcesu ani porażki:**
+
+- Wzrost impresji sam w sobie nic nie znaczy — patrzeć na **search terms**, czy zapytania wyglądają jak software, nie jak fabryka.
+- Możliwy **wzrost śr. CPC powyżej €3.44** i to będzie **dobry znak**: znaczy, że kupujemy trafniejszy, droższy ruch zamiast taniego przemysłowego. Prognoza Google dla tej kampanii to €4.42, więc ruch w tę stronę jest zgodny z planem.
+- Spadek liczby kliknięć przy tym samym budżecie jest **oczekiwany** i nie jest regresem.
+- Status `Eligible (Limited) / Missing enough relevant keywords` może utrzymać się jeszcze kilka godzin — przeliczy się po wyjściu 26 nowych słów z review.
+
+### Zostało do zrobienia (aktualizacja)
+
+- [ ] **Rano: przegląd search terms** — czy negatywy odcięły FANUC i spółkę, i czy pojawiły się realne zapytania software'owe. To jedyny miarodajny test całej tej interwencji.
+- [ ] **Sprawdzić, czy grupa Shopify wreszcie ma impresje.** Jeśli nadal 0 po dniu z negatywami i phrase matchem — dopiero wtedy hipoteza o limicie €8 / rozdzieleniu kampanii, i sprawdzić **Search impr. share (lost to rank)** w kolumnach.
+- [ ] **Zweryfikować status 26 nowych słów** (Pending → Eligible) i 13 nowych assetów (Pending → Approved).
+- [ ] Podnieść Ad strength grupy 1 z „Average" do „Good" — zostały wolne slaty nagłówków (13 z 15).
+- [ ] Business name „Marotino" wisi w `Pending` od 14.09 — jeśli za kilka dni nadal nie będzie zatwierdzony, zgłosić.
+- [ ] Rozważyć harmonogram reklam pod godziny pracy w USA — **dopiero gdy będą dane per godzina**.
+- [ ] **Advertiser verification przed 2026-10-07** — nadal otwarte, dotyczy całego konta.

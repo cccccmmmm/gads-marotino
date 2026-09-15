@@ -592,3 +592,64 @@ Warto to zestawić ze startem Xenii, gdzie równolegle występowały cztery blok
 - [ ] **Utwardzenie server-side trackingu dla `contact`** — obecnie konwersje idą wyłącznie client-side i dziedziczą ryzyko fantomów opisane w sekcji „Znane ryzyko: szum". Cotygodniowo porównywać liczbę konwersji „Marotino Lead - Contact Form" w Ads z realnymi zgłoszeniami formularza `contact` w Netlify Forms.
 - [ ] Po tygodniu: **przegląd search terms** i dosypanie negatywów (przy Xenii tydzień 1 pokazał ~€21 spalone na frazach „ai for business" bez kontekstu).
 - [ ] **Advertiser verification** przed **2026-10-07** — dotyczy całego konta, więc blokuje też tę kampanię.
+
+---
+
+## Kampania 2 — pierwszy check-in po 1 dniu (15.09.2026)
+
+Dane odczytane z UI (brak API), zakres **All time** dla kampanii `24249790952`, czyli faktycznie 14–15.09.
+
+### Liczby
+
+| metryka | wartość |
+|---|---|
+| Impresje | **33** |
+| Kliknięcia | **2** |
+| CTR | 6.06% |
+| Śr. CPC | **€3.44** |
+| Koszt | **€6.89** |
+| Konwersje | **0** |
+| Status | **Eligible (Limited)** — „Missing enough relevant keywords" |
+
+Dla porównania, Xenia w swoim ostatnim tygodniu (8–14.09, ostatni dzień serwowania to 14.09: 116 impr., 29 klików, €20.93) miała śr. CPC **€0.87**. Nowa kampania jest więc **~4× droższa za kliknięcie** — co jest spodziewane (B2B usługi vs nisza hotelowa), ale trzeba to czytać razem z prognozą z sekcji „Realistyczna matematyka przy €12/dzień": tam Google estymował €4.42, a €3.44 mieści się poniżej tej estymaty. **Limit max CPC €8 nie jest obecnie blokerem** — realna stawka jest od niego mocno niższa.
+
+### Najważniejsze odkrycie: cały ruch idzie z JEDNEGO słowa, i to nie z tego, o które nam chodziło
+
+Rozbicie po słowach kluczowych (All time):
+
+| słowo | impr. | kliki | koszt |
+|---|---|---|---|
+| `"system integration services"` (phrase) | **27** | **2** | **€6.89** |
+| `"data integration services"` (phrase) | 5 | 0 | €0.00 |
+| **wszystkie 7 fraz exact w grupie 1** | **0** | 0 | €0.00 |
+| **cała grupa „Ecommerce - Shopify" (7 fraz)** | **0** | 0 | €0.00 |
+
+Czyli **100% wydatku pochodzi z dwóch fraz phrase match, a exact match nie zebrał ani jednej impresji**. Grupa e-commerce — ta, pod którą mamy najmocniejsze portfolio (Batycki, Delta Marine, Ebikezilla, Loventi) i najtańsze wejście w całym researchu (€7.14 na `shopify migration services`) — **nie wystartowała wcale**.
+
+### I odkrycie gorsze: phrase match łapie przemysłową automatykę, nie integracje software'owe
+
+Search terms report (te, które Google w ogóle pokazuje — 6 z 32 impresji, reszta ukryta jako „Other search terms"):
+
+| zapytanie | impr. |
+|---|---|
+| `fanuc system integrator` | 3 |
+| `am system integrations` | 1 |
+| `automation systems integrator` | 1 |
+| `integration in salesforce` | 1 |
+
+**FANUC to producent robotów przemysłowych.** „Systems integrator" w USA to utrwalony termin z branży **automatyki fabrycznej / robotyki** — firmy, które instalują linie produkcyjne, a nie łączą API. Fraza `"system integration services"`, wybrana w researchu jako najlepszy stosunek wolumenu do ceny (390 wyszukiwań, wejście €7.42), sprowadza więc w dużej mierze **ruch z zupełnie innej branży**. Te 390 wyszukiwań/mies. to nie jest 390 zapytań o software house.
+
+To bezpośrednio wyjaśnia, dlaczego exact match ma zero: `[system integration services]` w dokładnym brzmieniu prawie nikt nie wpisuje — wolumen z Keyword Plannera rozkłada się na warianty przemysłowe, które łapie tylko phrase.
+
+**Wniosek na przyszłość (nowy, nie było go w researchu):** wolumen z Keyword Plannera nie mówi nic o **intencji branżowej** za frazą. Przy frazach, które mogą mieć homonim w innej branży (integration, automation, systems, solutions), przed uruchomieniem sprawdzić realne SERP-y albo od razu przygotować negatywy branżowe. Research z 14.09 sprawdził wolumen, cenę i konkurencję — ale nie sprawdził, **kto** to wyszukuje.
+
+### Co z tego wynika operacyjnie
+
+1. **Dosypać negatywy przemysłowe** — `fanuc`, `robot`, `robotics`, `plc`, `scada`, `industrial`, `automation integrator`, `systems integrator` (jako negatyw phrase), `manufacturing`. To jest pilniejsze niż standardowy przegląd search terms po tygodniu, bo to nie szum na marginesie, a **główne źródło ruchu**.
+2. **Nie panikować przy „Eligible (Limited) / Missing enough relevant keywords"** — to ten sam świadomy kompromis, który zapisaliśmy przy starcie (wąska lista exact/phrase przy €12/dzień). Ale w połączeniu z faktem, że exact ma 0 impresji, komunikat przestaje być tylko kosmetyczny: przy tak wąskiej liście realny ruch kupujemy **wyłącznie** przez 2 frazy phrase, i to te niedopasowane.
+3. **Zbadać, dlaczego grupa Shopify ma 0 impresji.** Hipoteza: limit max CPC €8 jest ustawiony dokładnie na progu wejścia dla tych fraz (`hire shopify developer` €7.15–28.30, `shopify developer near me` €7.98–40.63) — czyli formalnie mieścimy się w dolnej granicy, ale przegrywamy każdą aukcję. Do sprawdzenia w kolumnach **Search impr. share (lost to rank)** albo przez symulator stawek, gdy uzbiera się dane. Jeśli hipoteza się potwierdzi, to jest realne napięcie między „twardy limit €8 chroni przed stawkami €100" a „przy €8 nie kupimy najlepszej grupy słów".
+4. **0 konwersji po 2 kliknięciach nie znaczy nic** — przy prognozie 1–2 leady/mies. brak konwersji przez pierwsze dni jest w pełni zgodny z arytmetyką z sekcji wyżej. Nie wyciągać wniosków o skuteczności przed ~50 kliknięciami.
+
+### Poprawka do dokumentacji
+
+Grupa reklam 1 nazywa się w koncie faktycznie **„Ad group 1"** (nazwa domyślna z kreatora), a nie „integracje" — w README figurowała pod nazwą opisową. Warto ją przemianować, żeby raporty były czytelne, skoro grup jest już dwie.

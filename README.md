@@ -836,3 +836,114 @@ Uwaga: `/ar/services/mobile-app-development` **nie ma własnego formularza** —
 - Selektor języka bywa **zablokowany na „All languages"** i nie da się go zmienić — przy frazach jednojęzycznych to nie problem, ale nie jest to formalna filtracja po języku.
 - Przycisk usuwania lokalizacji to `<i>` z `aria-label="Remove targeted location, ..."`, nie `<button>` — skrypt szukający przycisków go nie znajdzie.
 - Chip lokalizacji otwierający dialog to `div.location-button` — stabilniejszy selektor niż szukanie po nazwie kraju.
+
+---
+
+## Druga fala zmian 15.09.2026 — korekta zakresu usług i przebudowa pod €12/dzień
+
+Kontekst: Cezary potwierdził **sufit budżetu €12/dzień jako nieprzekraczalny** oraz doprecyzował listę realnych kompetencji. To wywróciło część założeń z audytu porannego.
+
+### Korekta kompetencji — Salesforce wypada
+
+**Marotino NIE robi Salesforce.** Frazy salesforce'owe, które dodałem w nocy (`[salesforce integration services]`, `"salesforce integration services"`), zostały **usunięte**, a `salesforce` i `mulesoft` (platforma integracyjna Salesforce) dodane jako **negatywy**. Dodatkowo `step by step` — blokuje zapytania tutorialowe widziane w search terms.
+
+Negatywy: 78 → **81**. Słowa kluczowe: 40 → 38.
+
+Z reklamy grupy 1 wycięty nagłówek „Salesforce Integration" i opis wymieniający Salesforce. **Reklamowanie usługi, której nie dowozimy, jest gorsze niż spalony klik** — to zasada, nie kosmetyka.
+
+**Wniosek proceduralny:** frazy dobierane wyłącznie z danych o wolumenie, bez weryfikacji z listą realnych kompetencji, to ten sam błąd co FANUC — tylko z drugiej strony. Wolumen mówi, czego ludzie szukają; nie mówi, czy umiemy to dowieźć. **Przed dodaniem frazy z nazwą produktu/vendora trzeba potwierdzić kompetencję.**
+
+**Nadal do potwierdzenia:** `hubspot integration services` i `quickbooks integration services` też były dobrane z danych, nie z listy kompetencji. Nagłówek z nimi już wycięty prewencyjnie; jeśli nie umiemy — usunąć frazy tak jak salesforce'owe.
+
+### Zweryfikowane kompetencje i ich wolumen (USA)
+
+| kompetencja | fraza | wolumen | konkurencja | wejście | werdykt |
+|---|---|---|---|---|---|
+| **Java / Spring Boot** | hire java developer | **390** | Low | **€3.57** | ✅ dodane, nowa grupa |
+| | java development company | 210 | Low | — | ✅ |
+| | java development services | 210 | Low | €5.61 | ✅ |
+| | java software development services | 90 | Low | — | ✅ |
+| | spring boot developer | 40 | Low | — | ✅ |
+| **PrestaShop → Shopify** | prestashop to shopify migration | 20 | Low | **€2.96** | ✅ dodane |
+| | migrate prestashop to shopify | 20 | Low | €4.07 | ✅ |
+| **Shopify → Medusa** | shopify to medusa | **brak danych** | — | — | ❌ rynek nie istnieje |
+| | medusa js development | brak danych | — | — | ❌ |
+| **Coupa** | coupa punchout integration | **brak danych** | — | — | ❌ tylko outbound |
+| | punchout catalog integration | 10 | Low | — | ❌ |
+
+Java to **~960 wyszukiwań miesięcznie przy Low competition i wejściu €3.57** — tańsze niż nasza obecna średnia €3.61 i większa pula niż cały klaster integracyjny. Najlepszy stosunek wolumenu do ceny w całym dotychczasowym researchu przy potwierdzonej kompetencji.
+
+Medusa i Coupa potwierdzają regułę z 14.09: **posiadanie mocnej kompetencji nie znaczy, że ktoś jej szuka.** Materiał na outbound, nie na Search.
+
+### MVP / platformy / marketplace — sprawdzone, odrzucone
+
+| fraza | wolumen | wejście | werdykt |
+|---|---|---|---|
+| mvp development services | 590 | €21.24 | ❌ za drogo przy €12/dzień |
+| mvp development company | 480 | €25.96 (**+238% kwartalnie**) | ❌ za drogo, ale obserwować |
+| saas mvp development | 70 | €33.38 | ❌ |
+| **saas development company** | **590** | **€10.35** | ⚠️ najlepsze wejście w tym obszarze |
+| saas platform development | 140 | — | ⚠️ |
+| marketplace development company | 50 | €6.05 | ❌ |
+| build a marketplace | 40 | €4.00 | ❌ intencja informacyjna |
+| pozostałe marketplace | 10–20 | — | ❌ |
+
+**Marketplace nie istnieje jako rynek wyszukiwań** (~160/mies. łącznie). MVP ma wolumen, ale przy €21–33 za klik i budżecie €12/dzień to jedno kliknięcie co drugi dzień. `mvp development company` rosnące +238% kwartalnie warto obserwować — jeśli budżet kiedyś wzrośnie, to pierwszy kandydat.
+
+`saas development company` (590, Low, €10.35) to **właściwe wejście w „budowę platform"** — ten sam wolumen co MVP, połowa ceny, niższa konkurencja. Nie dodane z powodu budżetu.
+
+### Nowa grupa reklam: Java & Spring Boot
+
+12 słów (exact + phrase), landing `/services/custom-software-development`, ścieżka wyświetlania `marotino.com/Java/Spring-Boot`, RSA z 14 nagłówkami i 4 opisami. **Ad strength: Excellent.**
+
+Google przy tworzeniu grupy **podstawia 15 własnych nagłówków AI** — i znów były to te same bzdury co przy Xenii: „Tired of Off-the-Shelf", „Agile. Transparent. Brilliant", „High-Quality Services", „Bespoke Systems Designed". Wszystkie podmienione na frazy dosłowne + wyróżniki (fixed-price, własność kodu, darmowa rozmowa 30 min).
+
+Stan kampanii: **3 grupy, 55 słów kluczowych** (19 integracje / 12 Java / 24 Shopify).
+
+**Pułapka (powtórka z 14.09):** przy zapisie grupy Google wyrzucił **„Confirm it's you"** i **cała wypełniona formatka przepadła** — grupa nie powstała mimo komunikatu sugerującego zapis. Po ręcznym potwierdzeniu przez Cezarego trzeba było zbudować wszystko od zera. **Zawsze weryfikować listę grup po tej blokadzie, nie ufać komunikatom.**
+
+### Harmonogram reklam — zmiana decyzji wobec audytu porannego
+
+Rano odradzałem harmonogram, bo kampania była **ograniczona zasięgiem** (2 serwujące słowa, 19 impresji). Po zmianach sytuacja się odwróciła: 7 serwujących słów i **wydatek €14.45 przy budżecie €12** — kampania jest teraz **ograniczona budżetem**.
+
+Gdy wąskim gardłem jest budżet, rozkładanie go na 24h to marnotrawstwo. Ustawione: **wszystkie dni, 16:00–24:00 czasu konta (GMT+3) = 9:00–17:00 ET**, czyli pełny dzień pracy na wschodnim wybrzeżu USA.
+
+Google informuje przy tym w UI: *„campaigns now pace toward a full month, distributed across your active ad schedule"* — czyli zawężenie godzin **nie zmniejsza wydatku miesięcznego**, tylko go koncentruje. Dokładnie o to chodziło.
+
+**Nie dokończone:** druga linia harmonogramu 00:00–02:00 (= 17:00–19:00 ET, popołudnie zachodniego wybrzeża). UI uparcie stosował wybór godziny do pierwszego pola. Do dodania ręcznie, jeśli raport geo pokaże ruch z Zachodniego Wybrzeża.
+
+**Pułapka UI:** listy godzin w edytorze harmonogramu **wiążą się z ostatnio realnie sfokusowanym polem**, nie z tym, na które wskazuje skrypt. Syntetyczny `.click()` na opcji trafia w niewłaściwy combobox. Konieczne prawdziwe zdarzenia CDP zarówno na polu, jak i na opcji z listy.
+
+### Rewizja planu: przy €12/dzień NIE dzielimy na kampanie
+
+Audyt poranny proponował 4 kampanie per linia usługowa z osobnymi budżetami. **Przy sufitze €12/dzień to jest błąd** — cztery kampanie po €3/dzień to cztery kampanie, które nie serwują.
+
+Zostaje: **jedna kampania, trzy grupy, wspólny budżet, Maximize clicks.** Algorytm sam koncentruje wydatek na najtańszej puli — i to jest właściwe zachowanie, **pod warunkiem że ta pula jest dobra**. Przed 15.09 najtańszą kieszenią był FANUC; po negatywach są zapytania o API SaaS-owe i Java.
+
+Rozbicie na kampanie per linia/rynek ma sens dopiero od ~€40/dzień.
+
+### Arytmetyka sufitu — zapisana, żeby nie wracać do tematu
+
+€360/mies. ÷ €3,61 = **~100 kliknięć miesięcznie**. Przy realnej konwersji B2B 2–4% to **2–4 leady miesięcznie**, koszt leada €90–180.
+
+**Przy tym budżecie Google Ads nie jest maszyną do leadów, tylko tanim kanałem uzupełniającym.** Realnym źródłem leadów zostaje outbound (Twenty CRM, Apollo) — repo mówi to od 14.09 i dane tego nie podważyły. Software house zamyka projekty za €20–50k, więc jeden zamknięty deal pokrywa ten budżet na lata — ale oczekiwanie „maszyny" przy €12/dzień jest oczekiwaniem wbrew arytmetyce.
+
+**Konsekwencja praktyczna:** skoro budżetu nie ruszamy, liczą się już tylko dźwignie, które nie kosztują mediów:
+
+1. **Pętla konwersji do Twenty CRM** — `uploadClickConversions` jest napisane i **nigdy nie przetestowane**. Przy 100 klikach miesięcznie algorytm ma mało danych, więc tym bardziej muszą być prawdziwe, a nie „ktoś wysłał formularz".
+2. **Telefon w formularzu `/contact`** — obecnie imię, email, wiadomość. Dla B2B zamykanego rozmową to największa pojedyncza strata w lejku.
+3. **Dedykowane landingi zamiast `/contact`** — konwertują 2–3× lepiej. Przy 100 klikach to różnica między 2 a 5 leadami, czyli więcej niż dałoby podwojenie budżetu.
+
+Punkty 1–3 są poza Google Ads i mogą dać większy przyrost leadów niż jakakolwiek zmiana w kampanii. **Przy zablokowanym budżecie gra przenosi się na stronę.**
+
+### Zostało do zrobienia (aktualizacja)
+
+- [ ] Potwierdzić, czy umiemy HubSpot i QuickBooks — jeśli nie, usunąć frazy jak salesforce'owe
+- [ ] **Korekta stawek na urządzenia** — obcięcie mobile (B2B konwertuje na desktopie); nie ustawione, brak danych, do zrobienia po pierwszych 50 klikach
+- [ ] Druga linia harmonogramu 00:00–02:00 pod zachodnie wybrzeże USA
+- [ ] `uploadClickConversions` na żywo → pętla Twenty CRM
+- [ ] Telefon w formularzu `/contact`, dedykowane landingi per linia
+- [ ] Zmierzyć popyt na **AI agents / chatboty** — to realny produkt powtarzalny Marotino (10 wdrożeń Chatwoot+Dify w 2026), a nigdy nie sprawdzony w Keyword Plannerze
+- [ ] Zmierzyć Flutter / React Native
+- [ ] Przegląd search terms po tygodniu — dosypać negatywy na zapytania informacyjne (`creating api in java`, nazwy firm typu `systems integration inc sii`)
+- [ ] Advertiser verification przed **2026-10-07** — konto pokazuje już ostrzeżenie „Some ads may be limited"

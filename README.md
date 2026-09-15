@@ -760,3 +760,79 @@ Realistycznie: nowe słowa wychodzą z review w kilka godzin, negatywy działaj�
 - [ ] Business name „Marotino" wisi w `Pending` od 14.09 — jeśli za kilka dni nadal nie będzie zatwierdzony, zgłosić.
 - [ ] Rozważyć harmonogram reklam pod godziny pracy w USA — **dopiero gdy będą dane per godzina**.
 - [ ] **Advertiser verification przed 2026-10-07** — nadal otwarte, dotyczy całego konta.
+
+---
+
+## Research geo — wybór rynku na kolejną kampanię (15.09.2026)
+
+Dane z Keyword Plannera, drafty: `planId 1438165357` (15 fraz EN × 14 lokalizacji), `1438136905` i `1437986684` (36 fraz PL dla Warszawy). Drafty są nieczytelne po kilku dniach — ta sekcja jest źródłem prawdy.
+
+**Metoda:** jeden stały koszyk 15 angielskich fraz (`api/data/erp/system integration services`, `custom api development`, `salesforce integration services`, `shopify migration services`, `hire shopify developer`, `shopify developer`, `software maintenance services`, `mvp development services`, `custom software development`, `software house`, `it outsourcing`, `mobile app development company`) puszczony kolejno na każdą lokalizację. Angielski świadomie — Marotino ma gotowe angielskie reklamy i landingi, więc pytanie brzmi „gdzie nasz istniejący creative zadziała", nie „gdzie jest popyt w dowolnym języku".
+
+### Ranking
+
+| # | rynek | wolumen/mies. | najtańsze wejście | czym atakować |
+|---|---|---|---|---|
+| 1 | **USA** (działa) | **17 500** | €4.46 | wszystko; jedyny rynek z realnym klastrem integracyjnym (1 840) |
+| 2 | Wielka Brytania | 3 140 | €2.91 | Shopify (880) |
+| 3 | Kanada | 1 620 | €2.54 | Shopify (480) + mobile (260), wszystko Low competition |
+| 4 | Australia | 1 480 | €3.44 | Shopify (480), +23% kwartalnie |
+| 5 | **ZEA** | 1 420 | **€1.10** | mobile apps (**1 000**, Low, **+22% r/r**) |
+| 6 | Holandia | 610 | €2.96 | tylko Shopify (320) |
+| 7 | Arabia Saudyjska | 550 | **€0.97** | mobile (260, drogo €17.42), +24% r/r |
+| 8 | Singapur | 460 | €3.06 | custom software dev (90, +150% r/r) |
+| 9 | Irlandia | 220 | €4.73 | tylko jako dodatek do UK |
+| 10 | Polska / Warszawa | 880 (PL) | €1.22 | `outsourcing it` (210) |
+
+**Odrzucone jako martwe po angielsku:** Wiedeń ~120, Tel Aviv ~90, Nikozja ~60. Google nie podał dla Wiednia i Nikozji **ani jednej stawki** — za mało danych, żeby cokolwiek szacować. Nikozja ma 645 tys. zasięgu, więc to było przewidywalne; Wiedeń i Tel Aviv mają po ~7 mln, ale popyt tam jest niemieckojęzyczny i hebrajskojęzyczny.
+
+### Cztery wnioski, które zmieniają decyzję
+
+**1. Integracje nie istnieją poza USA — a to połowa obecnej kampanii.**
+
+Klaster integracyjny: USA **1 840**, UK 220, każdy inny rynek 50–80. Grupa `Integrations - API & ERP` **nie da się nigdzie przenieść**. Ekspansja geo = zmiana linii usługowej na Shopify albo mobile, nie tylko zmiana lokalizacji. To najważniejsze zdanie w tej sekcji.
+
+**2. Granica „ograniczony budżetem" vs „ograniczony popytem" leży między 5. i 6. pozycją.**
+
+Pozycje 1–5: więcej ruchu, niż zdołamy kupić — dosypanie budżetu daje więcej klików. Od 6. w dół: Holandia przy €4/klik wyczerpie się na ~90 klikach/mies. **niezależnie od budżetu**. Ta sama arytmetyka, która wcześniej zabiła pomysł kampanii tylko na Miami DMA (14.09) i tylko na Warszawę.
+
+**3. Każdy rynek musi być osobną kampanią.** Dorzucenie UK/ZEA jako lokalizacji do istniejącej kampanii sprawi, że Maximize clicks znajdzie najtańszą kieszeń (`software house` w Arabii za €0.97) i wrzuci tam cały budżet — dokładnie mechanizm z incydentu FANUC (patrz audyt 15.09).
+
+**4. Trendy się rozjeżdżają.** UK ma prawie wszystko na minusie r/r (−18% do −78%). Rosną: ZEA mobile +22%, Arabia +24%, Singapur custom dev +150%, Australia Shopify +23%. W horyzoncie 12-miesięcznym kolejność 2–5 wygląda inaczej niż w kwartalnym.
+
+### Ograniczenie operacyjne: obsługa klienta tylko EN lub AR
+
+Ustalenie Cezarego (15.09): leady da się obsłużyć **wyłącznie po angielsku lub arabsku** (arabski — Mohammad). To wycina z rankingu Polskę (#10) i Holandię (#6, i tak ograniczoną popytem), a **legitymizuje Zatokę** (#5 i #7), która bez arabskiej obsługi byłaby nie do wzięcia.
+
+Hebrajskie landingi (`/he/...`) istnieją w `marotino_www_astro1`, ale bez obsługi po hebrajsku są bezużyteczne — strata zerowa, bo Tel Aviv i tak miał ~90 wyszukiwań.
+
+### Zweryfikowane: arabska ścieżka jest gotowa end-to-end
+
+Sprawdzone `curl`em 15.09, nie założone:
+
+- `/ar`, `/ar/contact`, `/ar/services/mobile-app-development`, `/ar/services/e-commerce-solutions`, `/ar/services/custom-software-development` → wszystkie **200**.
+- Strony mają poprawne `lang="ar"` i **`dir="rtl"`** — to realna lokalizacja, nie maszynowa zaślepka.
+- `/ar/contact` ma **ten sam formularz Netlify `name="contact"`** co wersja angielska.
+- **`GTM-5JRBQF9N` ładuje się na stronach arabskich.**
+
+Wniosek: conversion action **„Marotino Lead - Contact Form" zadziała na ruchu arabskim bez żadnej nowej konfiguracji** — ten sam kontrakt `generate_lead` + `form_name: contact`. To eliminuje ryzyko powtórzenia historii z Xenią, gdzie tracking był pięć razy „naprawiony" przed wykryciem prawdziwej przyczyny.
+
+Uwaga: `/ar/services/mobile-app-development` **nie ma własnego formularza** — CTA prowadzi do `/ar/contact`. Przy kampanii mobile w ZEA final URL powinien to uwzględniać (albo landing dostaje formularz, albo mierzymy konwersję po przejściu na `/ar/contact`).
+
+### Decyzja: co dobrać
+
+**Najpierw nic.** USA ma 17 500 wyszukiwań, a my kupujemy 3,5 klika dziennie — łapiemy błąd zaokrąglenia. Ale mamy **40 klików i zero leadów**, a repo samo zakłada 1–2 leady/mies. i „nie oceniać przed ~50 klikami". Nie wiemy więc, czy lejek konwertuje — a to **te same reklamy, landingi i oferta w każdym nowym rynku**. Jeśli USA nie konwertuje, Kanada ani ZEA tego nie naprawią. Dowieźć USA do ~100 klików, potem wybierać.
+
+**Typ 1 — Kanada (bezpieczny, zero produkcji).** 1 620 wyszukiwań, wszystkie frazy Low competition, wejście €2.54 (najtaniej w świecie zachodnim), Shopify 480 + mobile 260. Te same reklamy, landingi i tracking; nakładające się godziny pracy z USA. Włączenie w godzinę, wyłączenie w dzień. **Wada uczciwie:** to „USA lite" — nie dywersyfikuje ryzyka, tylko zwiększa zasięg tej samej hipotezy.
+
+**Typ 2 — ZEA (asymetryczny zakład, jedyny z realną przewagą).** Jedyny rynek, gdzie mamy coś, czego konkurencja nie ma: Mohammada i gotowe arabskie landingi z działającym trackingiem. `mobile app development company` 1 000 wyszukiwań, Low competition, €7.10, **+22% r/r** — jedyny duży rosnący wolumen w całym badaniu. **Wady:** brak grupy reklam pod mobile i brak arabskich tekstów reklam; Dubaj przepełniony agencjami; Low competition przy 1 000 wyszukiwań jest podejrzanie dobre i może oznaczać ruch niskiej jakości; Mohammad zostaje single point of failure na obsługę AR.
+
+**Przy wymuszeniu jednego wyboru: Kanada** — koszt produkcji zero, decyzja odwracalna. ZEA to nie rozszerzenie geo, a osobny projekt (własna kampania, własny budżet, arabskie reklamy, grupa mobile, sprawdzony landing).
+
+### Pułapki Keyword Plannera (uzupełnienie do wpisu z 14.09)
+
+- **Lokalizacja wraca na Cypr przy KAŻDYM nowym planie**, nie raz na sesję. Potwierdzone czterokrotnie 15.09. Sprawdzać przed odczytem każdej tabeli.
+- Dodanie lokalizacji **nie usuwa Cypru** — trzeba go ręcznie zdjąć, inaczej dane są sumą dwóch rynków i wyglądają wiarygodnie, mimo że są bezużyteczne.
+- Selektor języka bywa **zablokowany na „All languages"** i nie da się go zmienić — przy frazach jednojęzycznych to nie problem, ale nie jest to formalna filtracja po języku.
+- Przycisk usuwania lokalizacji to `<i>` z `aria-label="Remove targeted location, ..."`, nie `<button>` — skrypt szukający przycisków go nie znajdzie.
+- Chip lokalizacji otwierający dialog to `div.location-button` — stabilniejszy selektor niż szukanie po nazwie kraju.

@@ -853,7 +853,11 @@ Z reklamy grupy 1 wycięty nagłówek „Salesforce Integration" i opis wymienia
 
 **Wniosek proceduralny:** frazy dobierane wyłącznie z danych o wolumenie, bez weryfikacji z listą realnych kompetencji, to ten sam błąd co FANUC — tylko z drugiej strony. Wolumen mówi, czego ludzie szukają; nie mówi, czy umiemy to dowieźć. **Przed dodaniem frazy z nazwą produktu/vendora trzeba potwierdzić kompetencję.**
 
-**Nadal do potwierdzenia:** `hubspot integration services` i `quickbooks integration services` też były dobrane z danych, nie z listy kompetencji. Nagłówek z nimi już wycięty prewencyjnie; jeśli nie umiemy — usunąć frazy tak jak salesforce'owe.
+**Potwierdzone i wycięte (15.09, później tego samego dnia):** Marotino **nie robi też HubSpota ani QuickBooks**. Usunięte 3 frazy (`[hubspot integration services]`, `"hubspot integration services"`, `[quickbooks integration services]`), dodane negatywy `hubspot` i `quickbooks`. Negatywy: 81 → **83**. Słowa kluczowe: 55 → **52**.
+
+Reklama grupy 1 zweryfikowana po zmianach — **zero wystąpień Salesforce, HubSpot i QuickBooks** w 14 nagłówkach i 3 opisach.
+
+**Reguła do stosowania przy każdej kolejnej rozbudowie:** nazwa vendora w słowie kluczowym lub nagłówku wymaga potwierdzenia kompetencji, zanim trafi do konta. W ciągu jednego dnia trzy razy dobrałem frazy z danych o wolumenie, które okazały się usługami spoza oferty (Salesforce, HubSpot, QuickBooks). Wolumen mówi, czego szukają ludzie — nie mówi, co umiemy dowieźć.
 
 ### Zweryfikowane kompetencje i ich wolumen (USA)
 

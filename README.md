@@ -942,12 +942,185 @@ Punkty 1–3 są poza Google Ads i mogą dać większy przyrost leadów niż jak
 
 ### Zostało do zrobienia (aktualizacja)
 
-- [ ] Potwierdzić, czy umiemy HubSpot i QuickBooks — jeśli nie, usunąć frazy jak salesforce'owe
+- [x] Potwierdzić, czy umiemy HubSpot i QuickBooks — **nie umiemy**, frazy usunięte, negatywy dodane (15.09)
 - [ ] **Korekta stawek na urządzenia** — obcięcie mobile (B2B konwertuje na desktopie); nie ustawione, brak danych, do zrobienia po pierwszych 50 klikach
 - [ ] Druga linia harmonogramu 00:00–02:00 pod zachodnie wybrzeże USA
 - [ ] `uploadClickConversions` na żywo → pętla Twenty CRM
 - [ ] Telefon w formularzu `/contact`, dedykowane landingi per linia
 - [ ] Zmierzyć popyt na **AI agents / chatboty** — to realny produkt powtarzalny Marotino (10 wdrożeń Chatwoot+Dify w 2026), a nigdy nie sprawdzony w Keyword Plannerze
-- [ ] Zmierzyć Flutter / React Native
+- [x] Zmierzyć Flutter / React Native — **zrobione 16.09**, patrz sekcja researchu mobile niżej
 - [ ] Przegląd search terms po tygodniu — dosypać negatywy na zapytania informacyjne (`creating api in java`, nazwy firm typu `systems integration inc sii`)
 - [ ] Advertiser verification przed **2026-10-07** — konto pokazuje już ostrzeżenie „Some ads may be limited"
+
+---
+
+## Check-in 16.09.2026 — pierwszy pełny dzień po przebudowie
+
+### Liczby
+
+Wczoraj (15.09), całość kampanii 2: **86 impresji, 6 kliknięć, €21.56, CTR 6.98%, CPC €3.59, zero konwersji.**
+
+Dziś (16.09) o 13:25 czasu konta: **0 impresji, 0 kliknięć, €0.00 — i tak ma być.** Harmonogram 16:00–24:00 GMT+3 zapisał się poprawnie na wszystkie 7 dni, więc przed 16:00 kampania z definicji nie serwuje. Zero o poranku **nie jest objawem awarii** — to pierwszy dzień, w którym harmonogram działa od północy. Przy kolejnych porannych przeglądach nie wszczynać alarmu; realne dane są dopiero po 24:00 czasu konta.
+
+### Najważniejsze: wąskie gardło zmieniło się w ciągu doby
+
+W oknie harmonogramu (wtorek 16:00–24:00) kampania wydała **€7.11 z €12 budżetu — 59%.** Status konta: `Eligible (Limited) — Missing enough relevant keywords`.
+
+To **odwraca diagnozę z wieczora 15.09**, na podstawie której ustawiliśmy harmonogram. Wtedy kampania była ograniczona budżetem (€14.45 wydatku przy €12) i zawężenie godzin miało sens jako koncentracja. Po wycięciu Salesforce/HubSpot/QuickBooks plus zawężeniu godzin kampania jest **ograniczona zasięgiem, nie budżetem** — nie potrafi wydać własnych pieniędzy.
+
+**Wniosek proceduralny:** diagnoza „limited by budget" vs „limited by reach" ma ważność liczoną w godzinach, jeśli tego samego dnia wycinamy słowa i zawężamy godziny. Każda zmiana zakresu unieważnia poprzednią diagnozę wąskiego gardła — sprawdzać ją ponownie **po** zmianach, nie przed.
+
+### Serwuje 5 słów z 52
+
+| słowo | impr. | kliki | koszt |
+|---|---|---|---|
+| "system integration services" | 21 | 2 | €6.89 |
+| "data integration services" | 29 | 1 | €3.61 |
+| "custom api development" | 5 | 1 | €3.95 |
+| **"hire java developer"** | 13 | 1 | €3.57 |
+| **"spring boot developer"** | 11 | 1 | €3.54 |
+
+Pozostałe 47 słów: zero impresji, wszystkie ze statusem `Eligible` — **żadne nie jest „Low search volume"**, czyli to nie problem jakości słów, tylko zasięgu kampanii.
+
+**Java dowiozła od pierwszego dnia** — 2 kliknięcia po €3.55, zgodnie z researchem z 15.09. Grupa Shopify jest martwa: 2 impresje, 0 kliknięć na 24 słowa.
+
+### Dwie rzeczy warte zapamiętania z search terms
+
+**Po pierwsze:** zero przemysłowej automatyki. Negatywy z nocy 14/15 zadziałały w 100% — FANUC i spółka zniknęły całkowicie.
+
+**Po drugie, i to jest strukturalne: 5 z 6 kliknięć i €17.95 z €21.56 (83% wydatku) siedzi w „Other search terms".** To próg prywatności Google — zapytania z małą liczbą użytkowników nie są raportowane. **Przy 6 kliknięciach dziennie raport search terms jest praktycznie ślepy** i nie da się na nim optymalizować. Jedyne widoczne kliknięcie poszło na `salesforce api` za €3.61 — usługę, której nie robimy (klik sprzed dodania negatywu o 19:53, więc negatyw działa, ale to dosłowny rachunek za wczorajszą pomyłkę kompetencyjną).
+
+Konsekwencja: **przy tej skali „przegląd search terms" nie jest narzędziem optymalizacji, tylko wyrywkową kontrolą.** Decyzje muszą zapadać na poziomie słów kluczowych i match typów, nie na podstawie tego, co widać w raporcie zapytań.
+
+### Decyzja: nie ruszamy konta, przegląd za kilka dni
+
+Świadomie zostawiamy wszystko jak jest. Kampania ma za mało danych (6 kliknięć), żeby jakakolwiek zmiana była czymś innym niż zgadywaniem, a każda zmiana resetuje uczenie się algorytmu. Wracamy po kilku dniach zbierania danych w pełnym cyklu harmonogramu.
+
+---
+
+## Research 16.09.2026 — trzy obszary zbadane, żeby nie wracać do tematu
+
+Wszystkie wolumeny: Keyword Planner, **United States**, Sep 2025 – Aug 2026.
+
+**Pułapka potwierdzona ponownie i tym razem doprecyzowana:** Keyword Planner ustawia lokalizację **Cypr osobno dla każdego nowego planu**. To nie jest ustawienie konta, które raz się poprawia — wraca przy każdym „Get search volume and forecasts". Zawsze sprawdzić chip lokalizacji przed czytaniem liczb. Dodatkowo: pola lokalizacji **nie da się wypełnić programatycznie** (`value` + `input` event nie wywołuje podpowiedzi) — wymaga realnych zdarzeń klawiatury CDP.
+
+### 1. Własny stack (Astro, Netlify, Sanity) — rynek nie istnieje
+
+Kompetencja potwierdzona: `/services/web-development` wymienia wprost „Contentful, Sanity, Strapi, or Prismic" oraz „React, Next.js, Astro", a realne wdrożenia na Astro+Netlify to marotino.com, tuceto-www i tincors-web.
+
+| fraza | wolumen | werdykt |
+|---|---|---|
+| astro developer | 10 | ❌ |
+| astro js development / hire astro developer | brak danych | ❌ |
+| netlify developer | 10 | ❌ |
+| sanity cms development | 10 (-100% r/r) | ❌ |
+| sanity io developer / hire sanity developer | brak danych | ❌ |
+| jamstack development company | 90, ale -100% kwartalnie i r/r | ❌ |
+| contentful development agency | brak danych | ❌ |
+| wordpress to headless migration | brak danych | ❌ |
+
+**Ten sam wzorzec co Medusa i Coupa (15.09): nazw technologii szukają programiści, nie kupujący.** Klient nie wpisuje „hire astro developer" — wpisuje „website redesign" albo „web development company" i dopiero na rozmowie dowiaduje się, na czym mu to zbudujemy.
+
+**Reguła do zapamiętania: stack jest argumentem sprzedażowym, nie słowem kluczowym.** Sanity sprzedaje się frazą `headless cms agency`, nie własną nazwą. Nie wracać do tego tematu — zbadane i zamknięte.
+
+### 2. Web / headless / Next.js — realne, ale odłożone
+
+| fraza | wolumen | konkurencja | wejście |
+|---|---|---|---|
+| next js development company | 260 | Low | — |
+| hire next js developer | 260 | Low | €7.29 |
+| headless cms agency | 110 | Medium | €12.64 |
+| headless cms development company | 110 | Medium | €7.35 |
+| headless cms development | 40 | Low | — |
+| strapi development company | 30 | Low | — |
+| contentful developer | 30 | Medium | €17.33 |
+
+~780 wyszukiwań przy wejściu €7.29 i dobrym dopasowaniu do `/services/web-development`. Sensowny kandydat, ale słabszy od mobile — odłożony.
+
+**Webflow i website redesign: odrzucone decyzją biznesową (Cezary, 16.09), nie z powodu danych.** Dla porządku, liczby były: `webflow developer` 320 / `webflow development agency` 210 / `website redesign services` **6,600** przy €4.82 wejścia. `website redesign services` to największa pula w całym dotychczasowym researchu, ale intencja jest w większości małofirmowa i cenowo daleka od projektów €15–200K. Nie wracać do tego jako „przeoczonej okazji" — to była decyzja, nie przeoczenie.
+
+### 3. Mobile (Flutter / React Native) — najlepszy kandydat na rozbudowę
+
+Kompetencja najmocniej udowodniona ze wszystkich badanych: `/services/mobile-app-development` wymienia Flutter, React Native, Swift i Kotlin, a **HLM Lakeland (Flutter, 39 gatunków drewna, 3000+ pobrań w pierwszym roku, -38% czasu odpowiedzi supportu) to jedyne case study z Florydy i najmocniejszy dowód społeczny w serwisie.** Pierwszy raz w tym researchu fraza, dowód i landing page zgadzają się w stu procentach.
+
+**Głowa — duży wolumen, poza budżetem:**
+
+| fraza | wolumen | wejście (low) |
+|---|---|---|
+| mobile app development services | **9,900** | €11.84 |
+| app development company | 5,400 | €13.00 |
+| mobile app development company | 3,600 | €12.33 |
+| hire mobile app developer | 1,900 | €14.18 |
+| mobile app development agency | 1,900 (**+85% kw., +50% r/r**) | €12.74 |
+| custom mobile app development | 1,600 | €11.77 |
+| app development cost | 1,600 | €4.00 |
+
+**Ogon — tu budżet realnie działa:**
+
+| fraza | wolumen | wejście (low) |
+|---|---|---|
+| **cross platform app development company** | **880** | **€5.88** |
+| **flutter app development company** | 480 | **€5.79** |
+| **flutter app development services** | 320 | **€6.54** (górny zakres tylko €12.74) |
+| ios app development company | 880 | €8.66 |
+| hire android developer | 480 | €8.66 |
+| hire flutter developer | 260 | €8.84 |
+| react native app development services | 320 (+29% kw.) | €7.85 |
+| hire react native developer | 390 | €10.12 |
+| app development company usa | 1,300 | €9.82 |
+| enterprise mobile app development | 390 | €12.48 |
+
+Wszystko na Low competition.
+
+**Dlaczego nie ruszamy głowy.** `mobile app development services` to 9,900 wyszukiwań, ale przy €11.84 wejścia i €12/dzień kupujemy **jedno kliknięcie dziennie**, licytując się z amerykańskimi butikami o budżetach rzędu $50K/mies. To ten sam błąd co MVP przy €21–33, tylko z wolumenem, który go maskuje.
+
+**Cała kategoria mobile się kurczy** — r/r: `app development company usa` -84%, `cross platform app development company` -81%, `android app development company` -76%, `mobile app development services` -65%. To trend, nie wahanie. Rosną tylko dwie frazy: **`mobile app development agency` (+85% kw., +50% r/r)** i `react native app development services` (+29% kw.). Ciekawe, że rośnie framing „agency", a spada „company" — mieć oba słowa w reklamie. Mimo spadku pula mobile jest **~10× większa niż cały obecny klaster integracyjny**, więc pozostaje najlepszym kandydatem — ale nie budować na tym planu trzyletniego.
+
+**`app development cost` (1,600, €4.00) — najtańsze wejście w kategorii, zablokowane brakiem landingu.** Mamy `/cost/custom-software-development`, `/cost/saas-development` i `/cost/ai-development`, ale **nie ma `/cost/mobile-app-development`**. Ta jedna strona odblokowuje 1,600 wyszukiwań przy €4.00 — czyli taniej niż nasz obecny średni CPC €3.59 przy czterokrotnie większym wolumenie niż cały klaster integracyjny. To najtańszy znany nam sposób na zwiększenie zasięgu konta.
+
+---
+
+## Plan rozwoju konta — kolejność, nie lista życzeń
+
+Ustalone 16.09.2026. Kampania nie potrafi dziś wydać €12, więc kolejnym ruchem jest **zasięg**, nie budżet.
+
+### Gdy wracamy za kilka dni (bez zmiany budżetu)
+
+1. **Grupa „Mobile Apps — Flutter & Cross-Platform"**, landing `/services/mobile-app-development`, wyłącznie ogon: `cross platform app development company`, `flutter app development company`, `flutter app development services`, `ios app development company`, `hire flutter developer`, `hire react native developer`, `react native app development services`, `app development company usa` (exact + phrase). ~2,400 wyszukiwań przy €5.79–9.82. RSA zbudowany wokół **HLM Lakeland z konkretnymi liczbami**, nie wokół ogólników, które podstawia Google.
+2. **Negatywy od pierwszej minuty** — mobile ma najgorszy ruch śmieciowy z badanych kategorii: `cost`, `salary`, `jobs`, `course`, `tutorial`, `free`, `intern`, `how to`, `ideas`, `template`.
+3. **Negatywy informacyjne na Javę** — `interview questions`, `learning`, `tutorial`. Wczoraj grupa złapała `java spring boot interview questions`, `spring boot microservice interview questions`, `learning spring boot`, `java developer madison wi`. Na razie bez kliknięć, ale to kwestia czasu.
+4. **Rozszerzyć harmonogram albo dodać drugą linię 00:00–02:00** — skoro budżetu nie dopalamy, zawężenie godzin z 15.09 kosztuje nas zasięg, a nie oszczędza pieniędzy.
+
+**Konsekwencja do zaakceptowania przed wdrożeniem:** średni CPC pójdzie z €3.59 na €6–8, więc miesięczne ~100 kliknięć spadnie do ~55–65. Mniej kliknięć, ale z realnym dowodem na landingu. Dotychczasowe 100 kliknięć dało zero konwersji, więc ta wymiana jest korzystna.
+
+### Gdy budżet wzrośnie do ~€25/dzień
+
+5. Klaster **Next.js + headless CMS** (~780 wyszukiwań, €7.29) jako druga grupa w tej samej kampanii.
+6. `enterprise mobile app development` (390, €12.48) — wyższa wartość projektu niż reszta ogona.
+
+### Gdy budżet wzrośnie do ~€40/dzień
+
+7. **Rozbicie na osobne kampanie per linia usługowa** — poniżej €40/dzień to błąd (cztery kampanie po €3 to cztery kampanie, które nie serwują).
+8. Wejście w głowę mobile (`mobile app development agency` jako pierwsza — jedyna rosnąca) i `saas development company` (590, €10.35).
+9. `mvp development company` — €25.96, ale **+238% kwartalnie**; obserwować niezależnie od budżetu.
+
+### Niezależne od budżetu — strona, nie Ads
+
+Przy zablokowanym budżecie to jest jedyne miejsce, gdzie da się wygrać więcej niż jakąkolwiek zmianą w koncie:
+
+10. **`/cost/mobile-app-development`** — odblokowuje `app development cost` (1,600, €4.00). Najlepszy stosunek wysiłku do zasięgu z całej listy.
+11. **Telefon w formularzu `/contact`** — dziś imię, email, wiadomość. Dla B2B zamykanego rozmową to największa pojedyncza strata w lejku.
+12. **`uploadClickConversions` na żywo** → pętla do Twenty CRM. Przy ~60–100 klikach miesięcznie algorytm ma mało danych, więc tym bardziej muszą być prawdziwe.
+13. **Dedykowane landingi per linia** zamiast `/contact` — konwertują 2–3× lepiej, czyli więcej niż dałoby podwojenie budżetu.
+
+### Zbadane i zamknięte — nie wracać
+
+Salesforce, HubSpot, QuickBooks (brak kompetencji) · Medusa, Coupa (brak rynku) · Astro, Netlify, Sanity, Jamstack (brak rynku) · Webflow, website redesign (decyzja biznesowa) · marketplace (rynek nie istnieje) · MVP przy obecnym budżecie (za drogo).
+
+### Zostało do zrobienia (aktualizacja 16.09)
+
+- [ ] **Przegląd za kilka dni** — kampania zbiera dane w pełnym cyklu harmonogramu; do tego czasu zero zmian w koncie (decyzja z 16.09)
+- [ ] Zbudować grupę mobile wg punktów 1–3 planu rozwoju
+- [ ] Zmierzyć popyt na **AI agents / chatboty** — realny produkt powtarzalny Marotino (10 wdrożeń Chatwoot+Dify w 2026), wciąż niesprawdzony w Keyword Plannerze
+- [ ] **Korekta stawek na urządzenia** — obcięcie mobile (B2B konwertuje na desktopie); do zrobienia po pierwszych 50 klikach
+- [ ] Advertiser verification przed **2026-10-07** — ostrzeżenie „Some ads may be limited" wisi na koncie

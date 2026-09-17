@@ -1124,3 +1124,108 @@ Salesforce, HubSpot, QuickBooks (brak kompetencji) · Medusa, Coupa (brak rynku)
 - [ ] Zmierzyć popyt na **AI agents / chatboty** — realny produkt powtarzalny Marotino (10 wdrożeń Chatwoot+Dify w 2026), wciąż niesprawdzony w Keyword Plannerze
 - [ ] **Korekta stawek na urządzenia** — obcięcie mobile (B2B konwertuje na desktopie); do zrobienia po pierwszych 50 klikach
 - [ ] Advertiser verification przed **2026-10-07** — ostrzeżenie „Some ads may be limited" wisi na koncie
+
+---
+
+## Check-in 17.09.2026 + fala 1 rozbudowy kampanii
+
+### Odczyt za 16.09 — pierwszy pełny dzień w harmonogramie
+
+**55 impresji, 2 kliknięcia, €7.51, CTR 3.64%, CPC €3.75, zero konwersji.** Change history za 16.09 puste — czysty pomiar, bez naszych ingerencji.
+
+Porównanie jak za jak (to samo okno 16:00–24:00): wtorek 30 impr / 2 kliki / €7.11 → środa **55 impr** / 2 kliki / €7.51. Impresje +83%, kliknięcia bez zmian, CTR z 6.67% na 3.64% (na 55 impresjach to szum, nie trend).
+
+Narastająco od startu 14.09: **141 impresji, 8 kliknięć, €29.07, zero konwersji.**
+
+**Niedowydanie potwierdzone na drugim dniu: €7.11, potem €7.51 — za każdym razem ~60% z €12.** Diagnoza „ograniczeni zasięgiem, nie budżetem" przestała być hipotezą. W skali miesiąca to ~€225 zamiast €360.
+
+**Cała kampania stała na jednym słowie:** `"system integration services"` wzięło 26 z 55 impresji i **100% wydatku**. Pozostałe 51 słów dało 29 impresji i zero kliknięć.
+
+**Java pokazała prawdziwą twarz:** 17 impresji, zero kliknięć (dzień wcześniej 24 impr / 2 kliki). Search terms: `api gateway implementation in spring boot`, `java spring boot restful api` — obok wcześniejszych `interview questions` i `learning spring boot`. Fraza ściąga programistów szukających dokumentacji, nie kupujących.
+
+**Shopify: 1 impresja, drugi dzień martwa.** Search terms informacyjne: `shopify api pricing`, `does shopify have an api`.
+
+**Drugi vendor spoza oferty: `oracle data integration service` — 1 klik, €3.85, ponad połowa dziennego wydatku.** Cezary potwierdził 17.09: **Oracle nie robimy.** Dodane do negatywów.
+
+### Research usług 17.09 (USA) — czym rozszerzyć kampanię
+
+Inwentarz z serwisu: 14 stron `services/*`, 6 `industries/*`, 3 kosztowe, 13 case studies. Konto reklamowało ~15% tego, co firma sprzedaje. Zmierzone 37 fraz.
+
+**AI — największy klaster, jaki znaleźliśmy, i jedyny rosnący:**
+
+| fraza | wolumen | trend | wejście |
+|---|---|---|---|
+| **ai automation agency** | **4 400** | +22% kw., **+132% r/r** | **€5.16** |
+| ai development company | 2 900 | 0% r/r | €9.77 |
+| ai agent development company | 720 | **+49% kw.** | €9.98 |
+| ai chatbot development company | 390 | +22% r/r | €4.82 |
+| chatbot development services | 320 | — | €6.03 |
+| custom ai agent development | 110 | +33% kw. | €12.55 |
+| rag development services | 70 | **+600% r/r** | €4.79 |
+
+Razem **~8 900 wyszukiwań** — pięciokrotność klastra integracyjnego USA (1 840). Dowód: 10 wdrożeń Chatwoot+Dify w 2026 + case study Breeze Voltuga. Martwe: `llm integration services` (10), `conversational ai development` (10).
+
+**Pozostałe klastry:**
+
+| klaster | werdykt |
+|---|---|
+| n8n / automatyzacja | ~460 wyszukiwań, **najtaniej na liście** (`n8n developer` €4.40), `n8n automation agency` +133% kw. i r/r — do fali 2 |
+| staffing | `staff augmentation services` 1 000 @ €9.49 jedyne w zasięgu; `hire dedicated developers` 880 (+213% r/r) ale €17.78; **`nearshore software development` €58.37 — trucizna, nie dotykać** |
+| legacy | 880 + 590 + 390, ale €13–18 i -56% do -64% r/r → odpada przy €12/dzień |
+| branże | healthcare 590 (+50% kw.) @ €9.39, fintech 480 @ €10.46, logistics 260 @ €8.15 — fala 2 |
+| e-commerce (luka) | `magento to shopify migration` 140 @ €10.46, `woocommerce to shopify migration` 110 @ €6.78 — strona to sprzedaje, konto nie miało |
+| martwe mimo case studies | `plaid integration services` 10, `software rescue services` 10, `make com automation agency` 10, `retool developer` 30, `smart contract development company` 260 przy **-92% r/r** |
+
+**Pytanie o kompetencje (Bubble, Retool, Airtable) rozwiązało się samo — te frazy nie mają wolumenu.** Ryzyko zniknęło razem z rynkiem.
+
+### Wykonane 17.09 — fala 1
+
+**Decyzja o strukturze: rozbudowa istniejącej kampanii, NIE nowe kampanie.** Przy €12/dzień podział to kampanie, które nie serwują; próg podziału pozostaje ~€40/dzień.
+
+**Nowa grupa „AI Agents and Automation"** — landing `/services/ai-agents`, ścieżka `marotino.com/AI-Agents/Development`, **13 słów** (7 exact + 6 phrase; `ai development company` tylko exact, bo najszersza). RSA: 15 własnych nagłówków, 4 opisy, oparte na 10 wdrożeniach i redukcji kosztów supportu 60–80%.
+
+**Nowa grupa „Mobile Apps - Flutter and Cross-Platform"** — landing `/services/mobile-app-development`, ścieżka `marotino.com/Flutter/Mobile-Apps`, **16 słów** (ogon Flutter/cross-platform, bez głowy `mobile app development services`). RSA oparty na HLM Lakeland: 39 gatunków drewna, tryb offline, 3000+ pobrań.
+
+**Do grupy Ecommerce - Shopify: 4 słowa** (`woocommerce to shopify migration`, `magento to shopify migration`, exact + phrase).
+
+**Negatywy: 83 → 104** (21 nowych, 7 odrzuconych jako duplikaty). Dodane m.in. `oracle`, `tool`, `tools`, `course`, `tutorial`, `jobs`, `salary`, `intern`, `stock`, `stocks`, `template`, `ideas`, `cost`, `certification`, `resume`, `syllabus`, `download` oraz frazowe `"interview questions"`, `"how to"`, `"what is"`, `"open source"`, `"for beginners"`.
+
+**Świadomie NIE dodane jako negatywy — i dlaczego:**
+- **`learning`** — zablokowałoby `machine learning`, realną usługę. Zamiast tego obserwować konkretne zapytania.
+- **`chatgpt`** — `chatgpt integration services` to zapytanie kupującego, nie szum. Taniej dodać później niż stracić leada.
+- **`free`** — blokuje `free quote` i `free consultation`, czyli intencję zakupową.
+
+Stan kampanii: **5 grup, 85 słów kluczowych, 104 negatywy.**
+
+### Audyt „czy Google nie wymyśla bzdur" (17.09)
+
+Na wyraźne życzenie Cezarego sprawdzone i potwierdzone:
+
+| ustawienie | stan |
+|---|---|
+| **Auto-apply recommendations** | **0 z 7 i 0 z 14 włączonych** — Google nie może samodzielnie zmienić niczego |
+| **Automatically created assets** | **Off** — „Use only assets I provide directly for my ads" |
+| **Broad match keywords** | **Off** — „Use keyword match types" |
+| **AI Max for Search** | nieaktywne (tylko panel promocyjny); search term matching = „Using only your keywords and match types" |
+| **Dynamic Search Ads** | nieustawione |
+
+**Pułapka potwierdzona trzeci raz: przy tworzeniu każdej grupy Google podstawia 15 własnych nagłówków AI** — znów „Tired of Off-the-Shelf", „Agile. Transparent. Brilliant", „High-Quality Services", „Bespoke Systems Designed". Wszystkie 30 (2 × 15) podmienione ręcznie. **Weryfikować wartości pól po zapisie, nie ufać temu, co widać w formularzu.**
+
+**Pułapka „Confirm it's you" wystąpiła ponownie** przy zapisie pierwszej grupy — tym razem **formularz przetrwał**, wystarczyło ponowić „Save and continue" po zamknięciu dialogu. To sprzeczne z doświadczeniem z 15.09, gdzie formatka przepadła. Wniosek: nie zakładać z góry utraty danych, ale **zawsze weryfikować listę grup po tej blokadzie.**
+
+**Pułapka narzędziowa:** pole lokalizacji w Keyword Plannerze nie przyjmuje wartości ustawionej programatycznie (`value` + `input` event nie wywołuje podpowiedzi) — wymaga realnych zdarzeń klawiatury CDP. Pola tekstowe formularza grupy reklam przyjmują normalnie.
+
+### Czego świadomie nie oceniamy
+
+**Zera konwersji przy 8 kliknięciach nie interpretujemy.** Przy konwersji B2B 2–4% oczekiwana liczba to 0,16–0,32. Pierwszy moment, w którym brak konwersji coś znaczy, to ~50 kliknięć.
+
+### Zostało do zrobienia (aktualizacja 17.09)
+
+- [ ] **Sprawdzić za 3–4 dni, gdzie poszedł budżet** — ryzyko: Maximize clicks skoncentruje się na najtańszej kieszeni (`n8n`/`rag` €4.40–4.79 nie są jeszcze w koncie, ale `ai chatbot development company` €4.82 i `rag development services` €4.79 już tak). Jeśli AI zje wszystko, a mobile nie dostanie impresji — rozdzielić budżety
+- [ ] **Pierwszy weekend kampanii (19–20.09)** — harmonogram obejmuje wszystkie 7 dni; zdecydować po danych, czy weekend wyłączyć lub dać ujemną korektę stawek
+- [ ] **Fala 2** (po danych z fali 1): n8n/automatyzacja, `staff augmentation services`, branże (healthcare, fintech, logistics)
+- [ ] **`/cost/mobile-app-development`** — odblokowuje `app development cost` (1 600, €4.00); po zbudowaniu strony **usunąć negatyw `cost`**
+- [ ] Przegląd search terms nowych grup po tygodniu — AI to najszersza kategoria, jaką dotąd tykaliśmy
+- [ ] `uploadClickConversions` na żywo → pętla Twenty CRM
+- [ ] Telefon w formularzu `/contact`, dedykowane landingi per linia
+- [ ] Advertiser verification przed **2026-10-07**

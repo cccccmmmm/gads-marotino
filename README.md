@@ -1229,3 +1229,70 @@ Na wyraźne życzenie Cezarego sprawdzone i potwierdzone:
 - [ ] `uploadClickConversions` na żywo → pętla Twenty CRM
 - [ ] Telefon w formularzu `/contact`, dedykowane landingi per linia
 - [ ] Advertiser verification przed **2026-10-07**
+
+---
+
+## Check-in 18.09.2026 — pierwszy dzień z falą 1 i korekta grupy AI
+
+### Odczyt za 17.09
+
+**138 impresji, 6 kliknięć, €23.84, CTR 4.35%, CPC €3.97, zero konwersji.** Wobec środy: impresje +151%, koszt +217%.
+
+| grupa | impresje | kliki | koszt |
+|---|---|---|---|
+| **AI Agents and Automation** | **119** (86%) | 4 | **€15.17** (64%) |
+| Java & Spring Boot | 8 | 2 | €8.67 |
+| Integrations - API & ERP | 10 | 0 | €0 |
+| Mobile Apps | 1 | 0 | €0 |
+| Ecommerce - Shopify | 0 | 0 | €0 |
+
+Narastająco od 14.09: **279 impresji, 14 kliknięć, €52.91, zero konwersji.**
+
+**Dwie rzeczy wydarzyły się jednocześnie i obie były przewidziane w README z 17.09:**
+
+1. **Maximize clicks przejął budżet na rzecz AI.** Nie „dołożył" ruchu — przesunął. Integracje spadły z 26–55 impresji do 10 i zera kliknięć. Mobile dostało **1 impresję**, mimo reklamy Eligible z Ad strength **Excellent** — to alokacja, nie jakość.
+2. **Wydatek €23.84 przy budżecie €12 (199%).** Google wyrównuje w skali miesiąca, ale z niedowydawania (60%) przeskoczyliśmy od razu na dwukrotność.
+
+### Ruch AI okazał się w większości bezwartościowy — diagnoza na poziomie słów
+
+Search terms grupy AI to katalog zapytań deweloperskich i produktowych: cudze produkty (`hermes ai agent` — klik €3.97, `open ai agent` — klik €4.52, `claude ai agent`, `manus ai agent`, `meta muse ai agent`, `mulerun agent`, `ai agent hugging face`, `openai agent sdk`), DIY (`build your own ai agent from scratch`, `how can i create an ai agent`, `how do you build an agent`, `build an ai agent from scratch pdf`), deweloperskie (`agent framework`, `agentic ai design patterns`, `agent orchestration ui`). **Ani jednego zapytania kupującego usługę.** Do tego `ai companies` — 32 impresje z close variant.
+
+**4 z 6 kliknięć (€15.35) w „Other search terms"** — niewidoczne. Widoczne są 2 i oba na cudze produkty.
+
+**Kluczowe: winowajcą NIE było to słowo, które podejrzewałem.**
+
+| słowo | impr. | kliki | koszt |
+|---|---|---|---|
+| **`"custom ai agent development"`** (phrase) | **68** | 3 | **€11.90** |
+| `[ai development company]` (exact) | 33 | 0 | €0 |
+| `"ai agent development company"` (phrase) | 9 | 1 | €3.27 |
+| `"ai automation agency"` (phrase) | 4 | 0 | €0 |
+| `[custom ai agent development]` (exact) | 4 | 0 | €0 |
+
+Pierwsza rekomendacja z rana 18.09 (na podstawie samych search terms) zakładała usunięcie `"ai automation agency"` i zachowanie `custom ai agent development` — **dokładnie odwrotnie, niż pokazały dane na poziomie słów.** Frazowe `"custom ai agent development"` Google rozciągnął do samego „ai agent" i z niego wyszedł cały katalog śmieci. `"ai automation agency"` — 4 impresje, zero szkody.
+
+**Wniosek proceduralny (nowy):** search terms mówią *co* ludzie wpisali, ale nie *które słowo* to wpuściło. Decyzję o usuwaniu słów podejmować wyłącznie po odczycie na poziomie słów kluczowych, nigdy z samego raportu zapytań.
+
+**Wzorzec, który zaczyna być czytelny w całym koncie:** frazy z „company" / „services" ściągają kupujących (`"ai agent development company"` CTR 11%, `"java development services"` 4 impr / 2 kliki), frazy techniczne bez tego słowa ściągają programistów (`custom ai agent development`, `spring boot developer`). Słowo określające *wykonawcę*, nie *czynność*, jest filtrem intencji.
+
+### Wykonane 18.09 (przed 16:00, czyli przed startem serwowania)
+
+- **Zapauzowane (nie usunięte):** `"custom ai agent development"` (phrase) i `[ai development company]`. Google przy „Remove" ostrzega, że to nieodwracalne; pauza daje ten sam efekt i zachowuje historię. Exact `[custom ai agent development]` zostaje — 4 impr, zero szkód, exact się nie rozjeżdża jak phrase.
+- **Zostawione:** `"ai agent development company"` (jedyne AI, które działa), `"ai automation agency"` (nieszkodliwe; niech 4 400 wyszukiwań pokaże, czym jest), `ai chatbot development company`, `chatbot development services`, `rag development services`.
+- **Negatywy 100 → 125** (+25): `build`, `create`, `creating`, `own`, `scratch`, `framework`, `frameworks`, `sdk`, `agentic`, `pdf`, `claude`, `openai`, `chatgpt`, `gemini`, `hugging face`, `manus`, `hermes`, `best`, `top`, `list`, frazowe `"ai companies"`, `"ai company"`, `"how can i"`, `"how do i"`, `"how do you"`.
+
+**Odwrócona decyzja z 17.09 w sprawie `chatgpt`:** argumentowałem, że `chatgpt integration services` to zapytanie kupującego. Dane pokazały `creating ai agents with chatgpt` — DIY. Wolę stracić hipotetycznego leada niż płacić za pewny szum. Nazwy modeli/produktów AI (`claude`, `openai`, `gemini`) trafiają na negatywy z tego samego powodu — ludzie ich szukający chcą produktu, nie wykonawcy. Negatywy nie wpływają na treść naszych reklam, które te nazwy wymieniają.
+
+**Dlaczego `"how to"` z 17.09 nie zadziałało:** phrase negative `"how to"` nie łapie `how can i`, `how do i`, `how do you`. Dodane osobno.
+
+**Mobile i Java bez zmian.** Po odcięciu AI budżet przestanie być wysysany — mobile ma dostać swoją szansę bez ingerencji. Java: drugi dzień z rzędu klik z frazy „services"/„company", zero z frazy technicznej.
+
+### Zostało do zrobienia (aktualizacja 18.09)
+
+- [ ] **Odczyt 19.09:** czy po pauzie wydatek wrócił w okolice €12 i czy mobile dostało impresje. Jeśli mobile nadal ~0 → rozmowa o budżecie, bo przy €12 rozdzielenie nie ma sensu
+- [ ] **Weekend 19–20.09** — pierwszy w historii kampanii; decyzja o dniach po danych
+- [ ] Search terms grupy AI po 3 dniach — czy 25 nowych negatywów wystarczyło; kandydaci do dalszego cięcia: `"ai automation agency"` jeśli zacznie ciągnąć szum
+- [ ] Fala 2 (n8n, `staff augmentation services`, branże) — **dopiero gdy AI jest czyste**, nie wcześniej
+- [ ] `/cost/mobile-app-development` → potem usunąć negatyw `cost`
+- [ ] `uploadClickConversions` na żywo → Twenty CRM
+- [ ] Advertiser verification przed **2026-10-07**

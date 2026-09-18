@@ -1296,3 +1296,15 @@ Pierwsza rekomendacja z rana 18.09 (na podstawie samych search terms) zakładał
 - [ ] `/cost/mobile-app-development` → potem usunąć negatyw `cost`
 - [ ] `uploadClickConversions` na żywo → Twenty CRM
 - [ ] Advertiser verification przed **2026-10-07**
+
+### Dogrywka 18.09, 18:45 czasu konta — AI na exact-only
+
+Odczyt śróddzienny (2,5 h serwowania): 70 impr, 1 klik (`chatbot developer`, €3.85), AI nadal 81% impresji. **Po porannej pauzie treść ruchu AI się nie zmieniła** — frazowe `"ai agent development company"` (24 impr) i `"ai automation agency"` (17 impr) Google dopasowuje do nazw cudzych startupów: `polsia ai` (11), `orca ade` (6), `manus ai` (3), `aleph alpha ai`, `anthropic`, `cloudflare ai agent`, `sintra ai`, `rivi ai`, `uare ai`, `hang ten ai`. Z frazy RAG: `ibm rag`, `convex rag`. Zero kliknięć na 41 impresji — jeszcze nie kosztuje, ale kwestia czasu.
+
+**Wniosek strukturalny: phrase match na frazę z „ai" Google traktuje jako „dowolna nazwa + ai".** Nazw startupów AI jest nieskończenie wiele — negatywy to walka z hydrą. Jedyne, co działa, to exact.
+
+**Wykonane:** zapauzowane frazowe `"ai agent development company"`, `"ai automation agency"`, `"rag development services"`. Wersje exact zostają. Zostaje też frazowe `"chatbot development services"` — jedyne, które dało klik z intencją; „chatbot" nie ma problemu z nazwami startupów. Stan grupy AI: 5 exact + `"chatbot development services"` + `"ai chatbot development company"` aktywne, 4 frazy zapauzowane.
+
+**Do weryfikacji 19.09:** `manus ai` pokazał 3 impresje mimo negatywu `manus` dodanego ~11:30 — sprawdzić, czy negatyw działa, czy to opóźnienie raportu.
+
+**Mobile: 0 impresji przy niewydanym budżecie (€3.85 z €12).** To już nie alokacja budżetu — mobile **nie wchodzi do aukcji**. Maximize clicks ustawia stawki pod najtańsze kliknięcia, a mobile ma wejście €5.79–9.82; do tego ogon Flutter to ~2 400/mies. w skali kraju = 20–40 aukcji dziennie w naszym oknie. **Twardy warunek:** jeśli w poniedziałek 21.09 mobile nadal ma 0 → przy Maximize clicks i €12 ta grupa nie zadziała nigdy; wybór: ręczna stawka minimalna ~€6 dla mobile albo rezygnacja.

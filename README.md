@@ -1308,3 +1308,48 @@ Odczyt śróddzienny (2,5 h serwowania): 70 impr, 1 klik (`chatbot developer`, �
 **Do weryfikacji 19.09:** `manus ai` pokazał 3 impresje mimo negatywu `manus` dodanego ~11:30 — sprawdzić, czy negatyw działa, czy to opóźnienie raportu.
 
 **Mobile: 0 impresji przy niewydanym budżecie (€3.85 z €12).** To już nie alokacja budżetu — mobile **nie wchodzi do aukcji**. Maximize clicks ustawia stawki pod najtańsze kliknięcia, a mobile ma wejście €5.79–9.82; do tego ogon Flutter to ~2 400/mies. w skali kraju = 20–40 aukcji dziennie w naszym oknie. **Twardy warunek:** jeśli w poniedziałek 21.09 mobile nadal ma 0 → przy Maximize clicks i €12 ta grupa nie zadziała nigdy; wybór: ręczna stawka minimalna ~€6 dla mobile albo rezygnacja.
+
+---
+
+## Check-in 19.09.2026 (sobota) — pierwszy dzień po korekcie AI
+
+### Odczyt za 18.09
+
+**103 impresje, 3 kliknięcia, €13.62, CTR 2.91%, CPC €4.54, zero konwersji.** Wobec czwartku (138 / 6 / €23.84): koszt -43%, wydatek wrócił w okolice budżetu (113% zamiast 199%).
+
+| grupa | impr. | kliki | koszt |
+|---|---|---|---|
+| AI Agents | 76 | 2 | €7.77 |
+| Integrations | 19 | 1 | €5.85 |
+| Java | 7 | 0 | — |
+| Shopify | 1 | 0 | — |
+| **Mobile** | **0** | 0 | — |
+
+Narastająco od 14.09: **382 impresje, 17 kliknięć, €66.53, zero konwersji.**
+
+**Uwaga do chronologii — korekta z 18.09 weszła później, niż zakładałem.** Change history: pauza 2 słów o **16:28**, negatywy o **16:30**, pauza 3 fraz o **19:01** czasu konta. Serwowanie startuje o 16:00, więc czwartkowy odczyt z rana odbywał się w czasie CEST, a zmiany wylądowały pół godziny **po** starcie aukcji. Konsekwencja: część czwartkowych impresji śmieciowych (`ai companies` 3, `creating ai agents` 2, `manus ai`) mogła paść w oknie 16:00–16:30, zanim negatywy zaczęły działać. **Nie ma dowodu, że negatywy nie działają** — wątpliwość z 18.09 wyjaśniona chronologią, nie usterką. Zapisać: godziny w rozmowie są CEST, godziny konta GMT+3 — przy ocenie „czy zmiana zadziałała" patrzeć na change history, nie na pamięć.
+
+**Trzy kliknięcia 18.09:**
+- `building ai agents` → €3.92, z **exact** `[custom ai agent development]` (close variant). Negatyw `build` **nie blokuje `building`** — negatywy nie mają stemmingu ani close variants. Dodane 19.09: `building`, `built`, `builder`, `creator`, `make`, `making` (131 negatywów).
+- `chatbot developer` → €3.85 — intencja OK.
+- 1 klik ukryty w „Other search terms" z `"api integration services"` → €5.85.
+
+Frazowe `"ai automation agency"` zdążyło zebrać 22 impresje (0 kliknięć) przed pauzą o 19:01 — nazwy startupów (`aleph alpha ai`, `cassidy ai`, `cloudflare ai agent`, `acumen by talarion`). Potwierdza decyzję o exact-only.
+
+### Sobota 19.09, 17:21 czasu konta (1 h 20 min serwowania)
+
+**2 impresje, 0 kliknięć, €0.00.** Pierwszy weekend kampanii + pierwszy dzień na exact-only w jednym — dwie zmienne naraz, więc dzisiejsza cisza nie mówi jeszcze, która z nich odpowiada. Pełny odczyt jutro.
+
+### Mobile — trzeci dzień z zerem
+
+0 impresji 17.09 (1), 18.09 (0), 19.09 (0) przy budżecie **niewydanym do końca** żadnego z tych dni. Warunek z 18.09 stoi: decyzja w poniedziałek 21.09 — ręczna stawka minimalna ~€6 dla grupy mobile albo rezygnacja.
+
+### Zostało do zrobienia (aktualizacja 19.09)
+
+- [ ] **Odczyt 20.09 (niedziela) i 21.09** — czy exact-only AI daje w ogóle impresje w dzień roboczy; czy weekend jest martwy (decyzja o dniach harmonogramu)
+- [ ] **21.09: decyzja mobile** — stawka ręczna vs rezygnacja
+- [ ] Search terms AI po 3 dniach exact-only — czy close variants exact nadal wpuszczają DIY (`building ai agents` pokazał, że tak)
+- [ ] Fala 2 dopiero gdy AI czyste
+- [ ] `/cost/mobile-app-development` → potem usunąć negatyw `cost`
+- [ ] `uploadClickConversions` → Twenty CRM
+- [ ] Advertiser verification przed **2026-10-07**
